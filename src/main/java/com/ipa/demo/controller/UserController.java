@@ -56,7 +56,7 @@ public class UserController {
                 user1.setPassword(password);
                 userService.save(user1);
                 try {
-                    mailUtil.send_mail("1327648074@qq.com", String.valueOf(Math.random() * 999));
+                    mailUtil.send_mail("1327648074@qq.com", userService.verCode());
                     System.out.println("邮件发送成功!");
                 } catch (javax.mail.MessagingException e) {
                     e.printStackTrace();

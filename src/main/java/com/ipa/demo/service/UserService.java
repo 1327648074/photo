@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ipa.demo.model.User;
 import com.ipa.demo.dao.UserDao;
-import java.util.List;
+import java.util.Random;
 
 @Service
 public class UserService {
@@ -23,4 +23,15 @@ public class UserService {
         return userDao.findByUsername(username);
     }
 
+    public String verCode(){
+        String verCode="";
+        Random rnd=new Random();
+        for(int i=0;i<6;i++){
+            int j=rnd.nextInt(10);
+            String k=Integer.toString(j);
+            verCode=verCode+k;
+        }
+
+        return "你的验证码是："+verCode;
+    }
 }
