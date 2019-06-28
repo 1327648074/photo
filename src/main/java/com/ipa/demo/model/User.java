@@ -1,9 +1,9 @@
 package com.ipa.demo.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+
+import javax.persistence.*;
 
 @Entity
 public class User {

@@ -18,7 +18,9 @@ public class UserService {
     public void save(User user1) {
         userDao.save(user1);
     }
-    public List<User> findByName(String username) {
+    public void delete(User user1){userDao.delete(user1);}
+    public User findByName(String username) {
         return userDao.findByUsername(username);
     }
+
 }
