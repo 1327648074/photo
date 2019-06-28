@@ -3,25 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>注册</title>
+    <script>
+        function sendVerCode() {
+            document.registerFrame.action="/front/doVerify"
+        }
+        function agree() {
+            document.registerFrame.action="/front/doRegister"
+        }
+    </script>
 </head>
 <body>
-<form accept-charset="utf-8" action="/front/doRegister" method="post">
+<form accept-charset="utf-8"  method="post" name="registerFrame" target="_blank">
     <div>
         <label>用户名称</label><input type="text" id="username" placeholder=" 用户名"
                                   name="username" required><br> <br>
     </div>
     <div>
-        <label>登录密码</label><input type="password" id="password"
-                                  placeholder=" 密码" required name="password"><br> <br>
+        <label>登录密码</label><input type="password" id="password" placeholder=" 密码" required name="password"><br> <br>
     </div>
     <div>
-        <label>确认密码</label><input type="password" id="password2"
-                                  placeholder=" 确认密码" required name="password2"><br>
+        <label>确认密码</label><input type="password" id="password2" placeholder=" 确认密码" required name="password2"><br>
         <br>
     </div>
     <div>
-        <span>已有账号去</span><a href="/front/login">登录</a> <input type="submit"
-                                                               value="同意协议并注册" />
+        <label>验证码</label><input type="text" id="verCode" placeholder=" 验证码"  name="verCode"><br><br>
+        <button onclick="sendVerCode()" >发送验证码</button>
+    </div>
+    <div>
+        <span>已有账号去</span><a href="/front/login">登录</a> <br>
+        <button onclick="agree()">同意注册并登录</button>
     </div>
 </form>
 </body>

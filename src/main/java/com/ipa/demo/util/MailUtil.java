@@ -45,7 +45,7 @@ public class MailUtil {
         //设置收件人
         message.setRecipient(Message.RecipientType.TO,new InternetAddress(to));
         //设置主题
-        message.setSubject("这是一份测试邮件");
+        message.setSubject("智能图片整理系统");
         //设置邮件正文  第二个参数是邮件发送的类型
         message.setContent(text,"text/html;charset=UTF-8");
         //发送一封邮件

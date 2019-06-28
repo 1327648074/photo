@@ -1,6 +1,7 @@
 package com.ipa.demo.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Null;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,27 +50,62 @@ public class UserController {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String password2 = request.getParameter("password2");
+        String verCode=request.getParameter("verCode");
         if (password.equals(password2)) {
-            if (registerUser(username) == true) {
-                User user1 = new User();
-                user1.setUsername(username);
-                user1.setPassword(password);
-                userService.save(user1);
-                try {
-                    mailUtil.send_mail("1327648074@qq.com", userService.verCode());
-                    System.out.println("邮件发送成功!");
-                } catch (javax.mail.MessagingException e) {
-                    e.printStackTrace();
-                } catch (GeneralSecurityException e) {
-                    e.printStackTrace();
-                }
-                return "login";
-            } else {
+            if(registerUser(username)){
                 return "register";
+            }else{
+                User user1=userService.findByName(username);
+                if(user1.getState()==0){
+                    if(user1.getVerCode().equals(verCode)){
+                        user1.setState(1);
+                        user1.setPassword(password);
+                        userService.save(user1);
+                        return "login";
+                    }else{
+                        return "register";
+                    }
+                }else {
+                    return "login";
+                }
             }
-        } else {
+        }else{
             return "register";
         }
+    }
+
+    @RequestMapping("/doVerify")
+    public String sendVerCode(HttpServletRequest request, User user){
+        String username=request.getParameter("username");
+        String verCode=userService.verCode();
+        if(userService.findByName(username)!= null){
+            User user1=userService.findByName(username);
+            if(user1.getState()==0){
+                userService.delete(user1);
+            }else{
+                return "login";
+            }
+        }
+        try {
+            mailUtil.send_mail(username, "你的验证码是"+verCode);
+            System.out.println("邮件发送成功!");
+            User user1=new User();
+            user1.setUsername(username);
+            user1.setVerCode(verCode);
+            user1.setState(0);
+            userService.save(user1);
+            return "verCode";
+        } catch (javax.mail.MessagingException e) {
+            e.printStackTrace();
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+        return "register";
+    }
+
+    @RequestMapping("/verCode")
+    public String verCode(){
+        return "verCode";
     }
 
     public Boolean registerUser(String username) {

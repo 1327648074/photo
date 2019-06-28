@@ -31,7 +31,6 @@ public class UserService {
             String k=Integer.toString(j);
             verCode=verCode+k;
         }
-
-        return "你的验证码是："+verCode;
+        return verCode;
     }
 }

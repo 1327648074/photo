@@ -16,6 +16,12 @@ public class User {
 
     private String password;
 
+    private String verCode;
+
+    //0表示未激活，1表示已激活
+    private int state;
+
+
     public Integer getId() {
         return id;
     }
@@ -35,4 +41,19 @@ public class User {
         this.password = password;
     }
 
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public String getVerCode() {
+        return verCode;
+    }
+
+    public void setVerCode(String verCode) {
+        this.verCode = verCode;
+    }
 }
