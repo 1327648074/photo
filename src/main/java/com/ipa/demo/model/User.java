@@ -40,19 +40,15 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
     public int getState() {
         return state;
     }
-
     public void setState(int state) {
         this.state = state;
     }
-
     public String getVerCode() {
         return verCode;
     }
-
     public void setVerCode(String verCode) {
         this.verCode = verCode;
     }

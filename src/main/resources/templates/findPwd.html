@@ -3,17 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>找回密码</title>
+    <script>
+        function sendFindVerCode() {
+            document.findFrame.action="/front/sendFindCode"
+        }
+        function modify() {
+            document.findFrame.action="/front/doFindPwd"
+        }
+    </script>
 </head>
 <body>
-<form action="/front/doFindPwd" accept-charset="utf-8" method="post">
+<form action="/front/doFindPwd" accept-charset="utf-8" method="post" target="_blank" name="findFrame">
     <div>
         <span>用户名<input type="text" name="username"></span><br><br>
-        <span>1+1=<input type="text" name="number"></span><br><br>
-        <span>输入你想修改的密码=<input type="text" name="pwd1"></span><br><br>
+        <label>验证码</label><input type="text" placeholder=" 验证码"  name="verCode">
+        <button onclick="sendFindVerCode()">发送验证码</button><br><br>
+        <span>输入你想修改的密码<input type="text" name="pwd1"></span><br><br>
         <span>确认密码<input type="text" name="pwd2"></span>
     </div>
     <div>
-        <button type="submit" value="确认修改">确认修改</button>
+        <button onclick="modify()">确认修改</button>
     </div>
 </form>
 </body>

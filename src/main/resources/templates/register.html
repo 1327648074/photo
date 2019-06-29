@@ -5,7 +5,7 @@
     <title>注册</title>
     <script>
         function sendVerCode() {
-            document.registerFrame.action="/front/doVerify"
+            document.registerFrame.action="/front/sendRegCode"
         }
         function agree() {
             document.registerFrame.action="/front/doRegister"
@@ -13,10 +13,9 @@
     </script>
 </head>
 <body>
-<form accept-charset="utf-8"  method="post" name="registerFrame" target="_blank">
+<form accept-charset="utf-8"  method="post" name="registerFrame" target="_blank" >
     <div>
-        <label>用户名称</label><input type="text" id="username" placeholder=" 用户名"
-                                  name="username" required><br> <br>
+        <label>用户名称</label><input type="text" id="username" placeholder=" 用户名" name="username" required><br> <br>
     </div>
     <div>
         <label>登录密码</label><input type="password" id="password" placeholder=" 密码" required name="password"><br> <br>
@@ -26,13 +25,14 @@
         <br>
     </div>
     <div>
-        <label>验证码</label><input type="text" id="verCode" placeholder=" 验证码"  name="verCode"><br><br>
-        <button onclick="sendVerCode()" >发送验证码</button>
+        <label>验证码</label><input type="text" id="verCode" placeholder=" 验证码"  name="verCode">
+        <button onclick="sendVerCode()">发送验证码</button>
     </div>
     <div>
         <span>已有账号去</span><a href="/front/login">登录</a> <br>
         <button onclick="agree()">同意注册并登录</button>
     </div>
+
 </form>
 </body>
 </html>
