@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>重置密码</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <script src="./jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#reset_frame").slideToggle("slow");
+
+$("#a").ready(b());
+            function b(){
+             $("#a").fadeIn("slow");
+             abc();
+              }
+            function abc(){
+            var a=$("#a");
+            a.animate({left:'400px',opacity:'0.2'},3200);
+            a.animate({left:'10px',opacity:'0.8'},3200,abc);
+            }
+         $("#b").ready(c());
+        function c(){
+      $("#b").fadeIn("slow");
+        d();
+         }
+         function d(){
+         var b=$("#b");
+         b.animate({right:'200px',opacity:'0'},5000);
+         b.animate({right:'10px',opacity:'0.5'},3000,c);}
+        
+
+     
+$("#c").ready(e());
+        function e(){
+         $("#c").fadeIn("slow");
+        f();
+         }
+         function f(){
+         var c=$("#c");
+         c.animate({opacity:'0'},5000);
+         c.animate({opacity:'0.7'},3000,f);}
+
+        });
+    </script>
+    <script>
+    function validate() {
+    var pwd1 = document.getElementById("newpwd").value;
+    var pwd2 = document.getElementById("newpwdAgain").value;
+    <!-- 对比两次输入的密码 -->
+    if(pwd1  == pwd2) {
+    document.getElementById("tishi").innerHTML="<font color='green'>两次密码相同</font>";
+    document.getElementById("submit").disabled = false;
+    }
+    else {
+    document.getElementById("tishi").innerHTML="<font color='red'>两次密码不相同</font>";
+    document.getElementById("submit").disabled = true;
+    }
+    }
+
+    </script>
+    <style>
+        body{
+            background-image: url("../static/timg.jpg");
+            background-repeat:no-repeat ;
+            background-size:100% 100%;
+            background-attachment: fixed;"
+        }
+
+        input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #btn_reset {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+
+        }
+
+        #btn_reset:hover {
+            background-color: #45a049;
+        }
+
+        #reset_frame{
+            margin:10px 500px 50px 480px;
+            border-style: none;
+            border-radius: 5px;
+            background:linear-gradient(to right, rgba(255,255,255,0.01) , rgba(209,250,250,0.9),rgba(255,255,255,0.01));
+            padding: 50px 120px;
+            opacity:0.9;
+            display: none;
+        }
+
+
+        a:link{
+            color: #faaf7b;
+            text-decoration: none;
+            font-size: 100%;
+            margin:0 70px;
+        }
+        a:visited{
+            color: #c64453;
+            text-decoration: underline;
+            font-size: 100%;
+            margin:0 70px;
+        }
+        a:hover{
+            color: #c99cff;
+            text-decoration: underline;
+            font-size: 100%;
+            margin:0 70px;
+        }
+        a:active{
+            color: #af3c61;
+            text-decoration: underline;
+            font-size: 100%;
+            margin:0 70px;
+        }
+
+
+
+#a{
+        position:absolute;
+        left:10px;
+        top:320px;
+         background-image:url("../static/云.png");
+         height:300px;
+         width:550px;
+          position:absolute;
+         display:none;
+         z-index:-5;
+        }
+
+        #b{
+        position:absolute;
+        right:10px;
+        top:400px;
+         background-image:url("../static/深色云.png");
+         height:240px;
+         width:505px;
+          position:absolute;
+          display:none;
+          opacity:0.8
+        }
+         #c{
+        position:absolute;
+        top:0;
+        left:30px;
+         background-image:url("../static/光点.png");
+         height:220px;
+             width:100%;
+          position:absolute;
+          display:none;
+          opacity:0.7
+        }
+
+#logo
+       {text-align:center}
+    </style>
+</head>
+<body>
+<div id="logo">
+<img src="../static/卿相.png" style="zoom:0.3" \></div>
+<div id="a" ></div>
+<div id="b" ></div>
+<div id="c"></div>
+<div id="reset_frame">
+    <form method="post" action="/front/doFindPwd">
+        <label>输入新密码</label><br>
+        <input type="password" id="newpwd" name="newpassword" placeholder="请输入您的新密码..." required="true" missingMessage="密码必须填写">
+        <label>再次输入密码</label><br>
+        <input type="password" id="newpwdAgain" name="newpasswordAgain" placeholder="请再次输入您的新密码..." required="true" missingMessage="密码必须填写" onkeyup="validate()">
+        <label><span id="tishi"></span></label><br>
+        <input type="button" id="btn_reset" value="重置密码">
+        <a href=/front/login>放弃更改并返回首页</a>
+    </form>
+</div>
+
+</body>
+</html>
