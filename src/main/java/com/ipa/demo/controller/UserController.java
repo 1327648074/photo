@@ -69,6 +69,18 @@ public class UserController {
         return "verCode";
     }
 
+    //注册成功界面
+    @RequestMapping("/register_success")
+    public String register_success(){return "register_success";}
+
+    //重置成功界面
+    @RequestMapping("/reset_success")
+    public String reset_success(){return "reset_success";}
+
+    //重置密码界面
+    @RequestMapping("/reset")
+    public String reset(){return "reset";}
+
     //成功登陆界面
     @RequestMapping("/success")
     public String success(){return "success";}
@@ -172,20 +184,25 @@ public class UserController {
     @RequestMapping("/doFindPwd")
     public String doFindPwd(HttpServletRequest request){
         String username=request.getParameter("username");
-        String findVerCode=request.getParameter("verCode");
         String pwd1=request.getParameter("pwd1");
         String pwd2=request.getParameter("pwd2");
         User user1=userService.findByName(username);
         if(pwd1.equals(pwd2)){
             if(registerUser(username)&&user1.getState()==1){
-                if(findVerCode.equals(user1.getVerCode())){
-                    user1.setPassword(pwd1);
-                    userService.save(user1);
-                    return "login";
-                }
-            }else{
-                return "register";
+                return "reset_success";
             }
+        }
+        return "findPwd";
+    }
+
+    //验证验证码
+    @RequestMapping("/verifyFindCode")
+    public String verifyFindCode(HttpServletRequest request){
+        String verCode=request.getParameter("verCode");
+        String username=request.getParameter("usernema");
+        User user1=userService.findByName(username);
+        if(registerUser(username)&&verCode.equals(user1.getVerCode())){
+            return "doFindPwd";
         }
         return "findPwd";
     }

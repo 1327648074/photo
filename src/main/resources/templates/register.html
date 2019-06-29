@@ -1,38 +1,249 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>注册</title>
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <script src="./jquery-3.4.1.min.js"></script>
     <script>
-        function sendVerCode() {
-            document.registerFrame.action="/front/sendRegCode"
-        }
-        function agree() {
-            document.registerFrame.action="/front/doRegister"
-        }
+        $(document).ready(function(){
+            $("#register_frame").slideToggle("slow");
+
+ $("#a").ready(b());
+            function b(){
+             $("#a").fadeIn("slow");
+             abc();
+              }
+            function abc(){
+            var a=$("#a");
+            a.animate({left:'400px',opacity:'0.2'},3200);
+            a.animate({left:'10px',opacity:'0.8'},3200,abc);
+            }
+         $("#b").ready(c());
+        function c(){
+      $("#b").fadeIn("slow");
+        d();
+         }
+         function d(){
+         var b=$("#b");
+         b.animate({right:'200px',opacity:'0'},5000);
+         b.animate({right:'10px',opacity:'0.5'},3000,c);}
+        
+
+     
+$("#c").ready(e());
+        function e(){
+         $("#c").fadeIn("slow");
+        f();
+         }
+         function f(){
+         var c=$("#c");
+         c.animate({opacity:'0'},5000);
+         c.animate({opacity:'0.7'},3000,f);}
+
+       
+        });
     </script>
+    <style>
+        body{
+            background-image: url("../static/timg.jpg");
+            background-repeat:no-repeat ;
+            background-size:100% 100%;
+            background-attachment: fixed;"
+        }
+
+        input[type=email] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type=text] {
+            width: 50%;
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            display: inline;
+            box-sizing: border-box;
+        }
+
+
+        #verify{
+        float:left;
+        width:130px;
+
+        }
+        #btn_vcode {
+            width: 140px;
+            height:40px;
+            background-color: #4CAF50;
+            display: inline;
+            padding: 9px 20px;
+            border-radius: 4px;
+            border: none;
+            color: white;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+
+        #btn_vcode:hover {
+            background-color: #45a049;
+        }
+
+        #btn_register {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;            
+        }
+
+        #btn_register:hover {
+            background-color: #45a049;
+        }
+
+        #register_frame{
+            margin:10px 480px 50px 450px;
+            border-style: none;
+            border-radius: 5px;
+            background:linear-gradient(to right, rgba(255,255,255,0) , rgba(209,250,250,0.9),rgba(255,255,255,0));
+            padding: 30px 140px ;
+            opacity:0.9;
+            display: none;
+        }
+
+
+        a:link{
+            color: #faaf7b;
+            text-decoration: none;
+            font-size: 100%;
+            margin:0 80px;
+        }
+        a:visited{
+            color: #c64453;
+            text-decoration: underline;
+            font-size: 100%;
+            margin:0 80px;
+        }
+        a:hover{
+            color: #c99cff;
+            text-decoration: underline;
+            font-size: 100%;
+            margin:0 80px;
+        }
+        a:active{
+            color: #af3c61;
+            text-decoration: underline;
+            font-size: 100%;
+            margin:0 80px;
+        }
+
+#a{
+        position:absolute;
+        left:10px;
+        top:320px;
+         background-image:url("../static/云.png");
+         height:300px;
+         width:550px;
+          position:absolute;
+         display:none;
+         z-index:-5;
+        }
+
+        #b{
+        position:absolute;
+        right:10px;
+        top:400px;
+         background-image:url("../static/深色云.png");
+         height:240px;
+         width:505px;
+          position:absolute;
+          display:none;
+          opacity:0.8
+        }
+         #c{
+        position:absolute;
+        top:0;
+        left:30px;
+         background-image:url("../static/光点.png");
+         height:220px;
+             width:95%;
+          position:absolute;
+          display:none;
+          opacity:0.7
+        }
+
+#logo
+       {text-align:center}
+
+
+</style>
 </head>
 <body>
-<form accept-charset="utf-8"  method="post" name="registerFrame" target="_blank" >
-    <div>
-        <label>用户名称</label><input type="text" id="username" placeholder=" 用户名" name="username" required><br> <br>
-    </div>
-    <div>
-        <label>登录密码</label><input type="password" id="password" placeholder=" 密码" required name="password"><br> <br>
-    </div>
-    <div>
-        <label>确认密码</label><input type="password" id="password2" placeholder=" 确认密码" required name="password2"><br>
-        <br>
-    </div>
-    <div>
-        <label>验证码</label><input type="text" id="verCode" placeholder=" 验证码"  name="verCode">
-        <button onclick="sendVerCode()">发送验证码</button>
-    </div>
-    <div>
-        <span>已有账号去</span><a href="/front/login">登录</a> <br>
-        <button onclick="agree()">同意注册并登录</button>
-    </div>
+<div id="logo">
+<img src="../static/卿相.png" style="zoom:0.3" \></div>
+<div id="a" ></div>
+<div id="b" ></div>
+<div id="c"></div>
+<div id="register_frame">
+    <form method="post" name="registerFrame" target="_blank" >
+        <label for="email">邮箱</label>
+        <input type="email" id="email" name="username" placeholder="请输入您的邮箱地址">
 
-</form>
+        <label for="password">密码</label>
+        <input type="password" id="password" name="password" placeholder="请输入您的密码" required="true" missingMessage="密码必须填写">
+
+        <label for="passwordAgain">确认密码</label>
+        <input type="password" id="passwordAgain" name=“password2" placeholder="请再次输入您的密码" required="true" missingMessage="密码必须填写" onkeyup="validate()">
+        <label><span id="tishi"></span></label>
+        <input type="text" id="verify" name="verCode" placeholder="请输入验证码" >
+        <input type="button" id="btn_vcode" value="发送验证码"
+              onclick="sendRegCode()" style="float:right;">
+        <input type="button" id="btn_register" value="立即注册" onclick="register()"><br>
+        <a href=login.html>已有账号？立即登录</a>
+
+
+    </form>
+      <script>
+    function validate() {
+        var pwd1 = document.getElementById("password").value;
+        var pwd2 = document.getElementById("passwordAgain").value;
+        <!-- 对比两次输入的密码 -->
+        if(pwd1  == pwd2) {
+            document.getElementById("tishi").innerHTML="<font color='green'>两次密码相同</font>";
+            document.getElementById("submit").disabled = false;
+        }
+        else {
+            document.getElementById("tishi").innerHTML="<font color='red'>两次密码不一致</font>";
+            document.getElementById("submit").disabled = true;
+        }
+    }
+    function sendRegCode() {
+        document.registerFrame.action="/front/sendRegCode"
+    }
+    
+    function register(){
+        document.registerFrame.action="/front/doRegister"
+    }
+</script>
+</div>
 </body>
 </html>

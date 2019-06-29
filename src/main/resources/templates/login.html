@@ -1,23 +1,194 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>login</title>
+    <title>登录</title>
+    <link rel="../static/favicon.ico">
+    <script type="login.js"></script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+
+            $("#login_frame").ready(function(){
+             $("#login_frame").slideToggle();
+              });
+            $("#a").ready(b());
+            function b(){
+             $("#a").fadeIn("slow");
+             abc();
+              }
+            function abc(){
+            var a=$("#a");
+            a.animate({left:'400px',opacity:'0.2'},3200);
+            a.animate({left:'10px',opacity:'0.8'},3200,abc);
+            }
+         $("#b").ready(c());
+        function c(){
+      $("#b").fadeIn("slow");
+        d();
+         }
+         function d(){
+         var b=$("#b");
+         b.animate({right:'200px',opacity:'0'},5000);
+         b.animate({right:'10px',opacity:'0.5'},3000,c);}
+        
+
+     
+$("#c").ready(e());
+        function e(){
+         $("#c").fadeIn("slow");
+        f();
+         }
+         function f(){
+         var c=$("#c");
+         c.animate({opacity:'0'},5000);
+         c.animate({opacity:'0.7'},3000,f);}
+});
+       
+    </script>
+    <style>
+        body{
+            background-image: url("../static/timg.jpg");
+            background-repeat:no-repeat ;
+            background-size:100% 100%;
+            background-attachment: fixed;
+        }
+
+        input[type=email] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 10px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type=button] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 2px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=button]:hover {
+            background-color: #C5EEAA;
+        }
+
+        a{
+            text-align: center;
+        }
+
+        #login_frame{
+            margin:10px 480px 50px 450px;
+            border-style: none;
+            background:linear-gradient(to right, rgba(255,255,255,0.01) , rgba(209,250,250,0.9),rgba(255,255,255,0.01));
+            padding: 50px 150px;
+            display: none;
+            opacity:0.9;
+            z-index:10;
+        }
+       
+
+        #a{
+        position:absolute;
+        left:10px;
+        top:320px;
+         background-image:url("../static/云.png");
+         height:300px;
+         width:550px;
+          position:absolute;
+         display:none;
+         z-index:-5;
+        }
+
+        #b{
+        position:absolute;
+        right:10px;
+        top:400px;
+         background-image:url("../static/深色云.png");
+         height:240px;
+         width:505px;
+          position:absolute;
+          display:none;
+          opacity:0.8
+        }
+         #c{
+        position:absolute;
+        top:0;
+        left:30px;
+         background-image:url("../static/光点.png");
+         height:220px;
+         width:95%;
+          position:absolute;
+          display:none;
+          opacity:0.7
+        }
+        a:link{
+            color: #faaf7b;
+            text-decoration: none;
+            font-size: 100%;
+        }
+        a:visited{
+            color: #c64453;
+            text-decoration: underline;
+            font-size: 100%;
+        }
+        a:hover{
+            color: #c99cff;
+            text-decoration: underline;
+            font-size: 100%;
+        }
+        a:active{
+            color: #af3c61;
+            text-decoration: underline;
+            font-size: 100%;
+        }
+
+#logo
+       {text-align:center}
+
+    </style>
 </head>
 <body>
-<form action="/front/doLogin" accept-charset="utf-8" method="post">
-    <div>
-        <label>用户名</label><input type="text" class="text" id="username" placeholder="用户名" name="username" required tabindex="1">
-    </div>
-    <div>
-        <label>密码</label><input type="password" class="text" id="password" placeholder="密码" required name="password" tabindex="2"><br>
-    </div>
+<div id="logo">
+<img src="../static/卿相.png" style="zoom:0.3" \></div>
+<div id="a" ></div>
+<div id="b" ></div>
+<div id="c"></div>
+<div id="login_frame" >
+    <form method="post" action="/front/doLogin">
+        <label for="email">账号</label><br>
+        <input type="email" id="email" name="username" placeholder="请输入您的Email地址"><br>
+
+        <label for="password">密码</label><br>
+        <input type="password" id="password" name="password" placeholder="请输入您的密码"><br><br>
+
+        <input type=button id="btn_login" value="登录" onclick="login();"/><br><br>
+
+<div id="forget" style="float:right;">
+        <a href="/front/findPwd" class="one">忘记密码</a>
+</div>
+<div id="register" style="float:left;">
+        <a href="/front/register" class="two">快速注册</a>
+</div>
     <br>
-    <div>
-        <span>没有账号？去<a href="/front/register">注册</a></span><br>
-        <button type="submit" value="登录" id="login">登录</button><br>
-        <span>忘记密码？<a href="/front/findPwd">找回密码</a></span>
-    </div>
-</form>
+    </form>
+</div>
+
 </body>
 </html>
