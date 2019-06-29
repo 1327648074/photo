@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>忘记密码</title>
-    <link rel="shortcut icon" href="../static/favicon.ico">
-    <script src="jquery-3.4.1.min.js"></script>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <script src="/jquery-3.4.1.min.js"></script>
     <script>
         $(document).ready(function(){
             $("#forget_frame").slideToggle("slow");
@@ -46,7 +46,7 @@ $("#c").ready(e());
     </script>
     <style>
         body{
-            background-image: url("../static/timg.jpg");
+            background-image: url("/timg.jpg");
             background-repeat:no-repeat ;
             background-size:100% 100%;
             background-attachment: fixed;"
@@ -118,7 +118,7 @@ $("#c").ready(e());
         position:absolute;
         left:10px;
         top:320px;
-         background-image:url("../static/云.png");
+         background-image:url("/云.png");
          height:300px;
          width:550px;
           position:absolute;
@@ -130,7 +130,7 @@ $("#c").ready(e());
         position:absolute;
         right:10px;
         top:400px;
-         background-image:url("../static/深色云.png");
+         background-image:url("/深色云.png");
          height:240px;
          width:505px;
           position:absolute;
@@ -141,9 +141,9 @@ $("#c").ready(e());
         position:absolute;
         top:0;
         left:30px;
-         background-image:url("../static/光点.png");
+         background-image:url("/光点.png");
          height:220px;
-             width:100%;
+             width:95%;
           position:absolute;
           display:none;
           opacity:0.7
@@ -154,7 +154,7 @@ $("#c").ready(e());
 </head>
 <body>
 <div id="logo">
-<img src="../static/卿相.png" style="zoom:0.3"></div>
+<img src="/卿相.png" style="zoom:0.3"></div>
 <div id="a" ></div>
 <div id="b" ></div>
 <div id="c"></div>
@@ -162,8 +162,8 @@ $("#c").ready(e());
     <form method="post" target="_blank" name="findFrame">
         <input type="email" id="email" name="username" placeholder="请输入您的注册邮箱...">
         <input type="text" id="verify" name="verCode" placeholder="请输入验证码...">
-        <input type="button" id="btn_vcode" value="发送验证码" onclick="sendFindCode()">
-        <input type="button" id="btn_next" name="nextstep" value="下一步" onclick="verify()">
+        <input type="submit" id="btn_vcode" value="发送验证码" onclick="sendFindCode()">
+        <input type="submit" id="btn_next" name="nextstep" value="下一步" onclick="verifyCode()">
     </form>
 
 </div>
@@ -171,7 +171,7 @@ $("#c").ready(e());
     function sendFindCode() {
         document.findFrame.action="/front/sendFindCode"
     }
-    function verify() {
+    function verifyCode() {
         document.findFrame.action="/front/verifyFindCode"
     }
 </script>

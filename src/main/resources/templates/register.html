@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>注册</title>
-    <link rel="shortcut icon" href="../static/favicon.ico">
-    <script src="./jquery-3.4.1.min.js"></script>
+    <script src="/jquery-3.4.1.min.js"></script>
+
+
     <script>
         $(document).ready(function(){
             $("#register_frame").slideToggle("slow");
-
- $("#a").ready(b());
+           $("#a").ready(b());
             function b(){
              $("#a").fadeIn("slow");
              abc();
@@ -19,7 +19,7 @@
             a.animate({left:'400px',opacity:'0.2'},3200);
             a.animate({left:'10px',opacity:'0.8'},3200,abc);
             }
-         $("#b").ready(c());
+          $("#b").ready(c());
         function c(){
       $("#b").fadeIn("slow");
         d();
@@ -28,10 +28,8 @@
          var b=$("#b");
          b.animate({right:'200px',opacity:'0'},5000);
          b.animate({right:'10px',opacity:'0.5'},3000,c);}
-        
-
      
-$("#c").ready(e());
+       $("#c").ready(e());
         function e(){
          $("#c").fadeIn("slow");
         f();
@@ -41,12 +39,38 @@ $("#c").ready(e());
          c.animate({opacity:'0'},5000);
          c.animate({opacity:'0.7'},3000,f);}
 
-       
         });
     </script>
+
+
+<script>
+    function validate() {
+        var pwd1 = document.getElementById("password").value;
+        var pwd2 = document.getElementById("passwordAgain").value;
+        if(pwd1  == pwd2) {
+            document.getElementById("alarmtip").innerHTML="<font color='green'>两次密码相同</font>";
+            document.getElementById("submit").disabled = false;
+        }
+        else {
+            document.getElementById("alarmtip").innerHTML="<font color='red'>两次密码不相同</font>";
+            document.getElementById("submit").disabled = true;
+        }
+    }
+
+    function sendRegCode(){
+        document.registerFrame.action="/front/sendRegCode"
+    }
+
+    function register(){
+        document.registerFrame.action="/front/doRegister"
+    }
+</script>
+
+
+
     <style>
         body{
-            background-image: url("../static/timg.jpg");
+            background-image: url("/timg.jpg");
             background-repeat:no-repeat ;
             background-size:100% 100%;
             background-attachment: fixed;"
@@ -86,7 +110,6 @@ $("#c").ready(e());
         #verify{
         float:left;
         width:130px;
-
         }
         #btn_vcode {
             width: 140px;
@@ -156,14 +179,14 @@ $("#c").ready(e());
             margin:0 80px;
         }
 
-#a{
+       #a{
         position:absolute;
         left:10px;
         top:320px;
-         background-image:url("../static/云.png");
+         background-image:url("/云.png");
          height:300px;
          width:550px;
-          position:absolute;
+         position:absolute;
          display:none;
          z-index:-5;
         }
@@ -172,78 +195,60 @@ $("#c").ready(e());
         position:absolute;
         right:10px;
         top:400px;
-         background-image:url("../static/深色云.png");
+         background-image:url("/深色云.png");
          height:240px;
          width:505px;
           position:absolute;
           display:none;
           opacity:0.8
-        }
-         #c{
+         }
+        
+
+        #c{
         position:absolute;
         top:0;
         left:30px;
-         background-image:url("../static/光点.png");
+         background-image:url("/光点.png");
          height:220px;
-             width:95%;
+         width:95%;
           position:absolute;
           display:none;
           opacity:0.7
         }
 
-#logo
+     #logo
        {text-align:center}
 
 
 </style>
 </head>
 <body>
-<div id="logo">
-<img src="../static/卿相.png" style="zoom:0.3" \></div>
+<div id="logo" >
+<img src="/卿相.png" style="zoom:0.3"\></div>
 <div id="a" ></div>
 <div id="b" ></div>
 <div id="c"></div>
 <div id="register_frame">
-    <form method="post" name="registerFrame" target="_blank" >
+    <form method="post" name="registerFrame" target="_blank">
         <label for="email">邮箱</label>
         <input type="email" id="email" name="username" placeholder="请输入您的邮箱地址">
-
         <label for="password">密码</label>
-        <input type="password" id="password" name="password" placeholder="请输入您的密码" required="true" missingMessage="密码必须填写">
-
+        <input type="password" id="password" placeholder="请输入您的密码" required="true" missingMessage="密码必须填写" name="password">
         <label for="passwordAgain">确认密码</label>
-        <input type="password" id="passwordAgain" name=“password2" placeholder="请再次输入您的密码" required="true" missingMessage="密码必须填写" onkeyup="validate()">
-        <label><span id="tishi"></span></label>
-        <input type="text" id="verify" name="verCode" placeholder="请输入验证码" >
-        <input type="button" id="btn_vcode" value="发送验证码"
-              onclick="sendRegCode()" style="float:right;">
-        <input type="button" id="btn_register" value="立即注册" onclick="register()"><br>
-        <a href=login.html>已有账号？立即登录</a>
-
+        <input type="password" id="passwordAgain" placeholder="请再次输入您的密码" required="true" missingMessage="密码必须填写" onkeyup="validate()" name="password2">
+        <br>
+        <label id="alarmtip"></label>
+        <br> 
+        <input type="text" id="verify" placeholder="请输入验证码" name="verCode" >
+        
+        <input type="submit" id="btn_vcode" value="发送验证码" style="float:right;" onclick="sendRegCode()">
+        <input type="submit" id="btn_register" value="立即注册" onclick="register()"><br>
+         <div style="text-align:center;">
+        <a href=/front/login>已有账号？立即登录</a>
+      </div>
 
     </form>
-      <script>
-    function validate() {
-        var pwd1 = document.getElementById("password").value;
-        var pwd2 = document.getElementById("passwordAgain").value;
-        <!-- 对比两次输入的密码 -->
-        if(pwd1  == pwd2) {
-            document.getElementById("tishi").innerHTML="<font color='green'>两次密码相同</font>";
-            document.getElementById("submit").disabled = false;
-        }
-        else {
-            document.getElementById("tishi").innerHTML="<font color='red'>两次密码不一致</font>";
-            document.getElementById("submit").disabled = true;
-        }
-    }
-    function sendRegCode() {
-        document.registerFrame.action="/front/sendRegCode"
-    }
-    
-    function register(){
-        document.registerFrame.action="/front/doRegister"
-    }
-</script>
+      
 </div>
 </body>
 </html>

@@ -1,6 +1,8 @@
 package com.ipa.demo.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +45,7 @@ public class UserController {
 
     //初始界面
     @RequestMapping("/index")
-    public String index() {
+    public String index(HttpSession httpSession) {
         return "index";
     }
 
@@ -130,7 +132,7 @@ public class UserController {
 
     //发送找回密码验证码
     @RequestMapping("/sendFindCode")
-    public String sendFindCode(HttpServletRequest request) {
+    public String sendFindCode(HttpServletRequest request,HttpSession httpSession) {
         String username=request.getParameter("username");
         User user1=userService.findByName(username);
         String verCode=createVerCode();
@@ -140,6 +142,7 @@ public class UserController {
                 System.out.println("邮件发送成功!");
                 user1.setVerCode(verCode);
                 userService.save(user1);
+                httpSession.setAttribute("mail",username);
                 return "verCode";
             } catch (javax.mail.MessagingException e) {
                 e.printStackTrace();
@@ -167,7 +170,7 @@ public class UserController {
                         user1.setState(1);
                         user1.setPassword(password);
                         userService.save(user1);
-                        return "login";
+                        return "register_success";
                     }else{
                         return "register";
                     }
@@ -182,13 +185,15 @@ public class UserController {
 
     //执行找回密码
     @RequestMapping("/doFindPwd")
-    public String doFindPwd(HttpServletRequest request){
-        String username=request.getParameter("username");
+    public String doFindPwd(HttpServletRequest request,HttpSession httpSession){
+        String username=httpSession.getAttribute("mail").toString();
         String pwd1=request.getParameter("pwd1");
         String pwd2=request.getParameter("pwd2");
         User user1=userService.findByName(username);
         if(pwd1.equals(pwd2)){
             if(registerUser(username)&&user1.getState()==1){
+                user1.setPassword(pwd1);
+                userService.save(user1);
                 return "reset_success";
             }
         }
@@ -199,10 +204,10 @@ public class UserController {
     @RequestMapping("/verifyFindCode")
     public String verifyFindCode(HttpServletRequest request){
         String verCode=request.getParameter("verCode");
-        String username=request.getParameter("usernema");
+        String username=request.getParameter("username");
         User user1=userService.findByName(username);
         if(registerUser(username)&&verCode.equals(user1.getVerCode())){
-            return "doFindPwd";
+            return "reset";
         }
         return "findPwd";
     }

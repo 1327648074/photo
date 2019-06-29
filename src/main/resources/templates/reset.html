@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>重置密码</title>
     <link rel="shortcut icon" href="favicon.ico">
-    <script src="./jquery-3.4.1.min.js"></script>
+    <script src="/jquery-3.4.1.min.js"></script>
     <script>
         $(document).ready(function(){
             $("#reset_frame").slideToggle("slow");
@@ -61,7 +61,7 @@ $("#c").ready(e());
     </script>
     <style>
         body{
-            background-image: url("../static/timg.jpg");
+            background-image: url("/timg.jpg");
             background-repeat:no-repeat ;
             background-size:100% 100%;
             background-attachment: fixed;"
@@ -135,7 +135,7 @@ $("#c").ready(e());
         position:absolute;
         left:10px;
         top:320px;
-         background-image:url("../static/云.png");
+         background-image:url("/云.png");
          height:300px;
          width:550px;
           position:absolute;
@@ -147,7 +147,7 @@ $("#c").ready(e());
         position:absolute;
         right:10px;
         top:400px;
-         background-image:url("../static/深色云.png");
+         background-image:url("/深色云.png");
          height:240px;
          width:505px;
           position:absolute;
@@ -158,9 +158,9 @@ $("#c").ready(e());
         position:absolute;
         top:0;
         left:30px;
-         background-image:url("../static/光点.png");
+         background-image:url("/光点.png");
          height:220px;
-             width:100%;
+             width:95%;
           position:absolute;
           display:none;
           opacity:0.7
@@ -172,18 +172,18 @@ $("#c").ready(e());
 </head>
 <body>
 <div id="logo">
-<img src="../static/卿相.png" style="zoom:0.3" \></div>
+<img src="/卿相.png" style="zoom:0.3" \></div>
 <div id="a" ></div>
 <div id="b" ></div>
 <div id="c"></div>
 <div id="reset_frame">
     <form method="post" action="/front/doFindPwd">
         <label>输入新密码</label><br>
-        <input type="password" id="newpwd" name="newpassword" placeholder="请输入您的新密码..." required="true" missingMessage="密码必须填写">
+        <input type="password" id="newpwd" name="pwd1" placeholder="请输入您的新密码..." required="true" missingMessage="密码必须填写">
         <label>再次输入密码</label><br>
-        <input type="password" id="newpwdAgain" name="newpasswordAgain" placeholder="请再次输入您的新密码..." required="true" missingMessage="密码必须填写" onkeyup="validate()">
+        <input type="password" id="newpwdAgain" name="pwd2" placeholder="请再次输入您的新密码..." required="true" missingMessage="密码必须填写" onkeyup="validate()">
         <label><span id="tishi"></span></label><br>
-        <input type="button" id="btn_reset" value="重置密码">
+        <input type="submit" id="btn_reset" value="重置密码">
         <a href=/front/login>放弃更改并返回首页</a>
     </form>
 </div>
