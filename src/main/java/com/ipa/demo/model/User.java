@@ -24,6 +24,10 @@ public class User {
     //用户激活状态：0表示未激活，1表示已激活
     private int state;
 
+    private String nickname;
+    private String sex;
+    private String autorgragh;
+    private String permail;
 
     public Integer getId() {
         return id;
@@ -54,5 +58,30 @@ public class User {
     }
     public void setVerCode(String verCode) {
         this.verCode = verCode;
+    }
+
+    public String getNickname(){
+        return nickname;
+    }
+    public void setNickname(String nickname){
+        this.nickname = nickname;
+    }
+    public String getSex(){
+        return sex;
+    }
+    public void setSex(String sex){
+        this.sex = sex;
+    }
+    public String getAutorgragh(){
+        return autorgragh;
+    }
+    public void setAutorgragh(String autorgragh){
+        this.autorgragh = autorgragh;
+    }
+    public String getPermail(){
+        return permail;
+    }
+    public void setPermail(String permail){
+        this.permail = permail;
     }
 }

@@ -89,11 +89,12 @@ public class UserController {
 
     //执行登录
     @RequestMapping("/doLogin")
-    public String login(HttpServletRequest request) {
+    public String login(HttpServletRequest request,HttpSession session) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         User user = userService.FindNameAndPsw(username, password);
         if (user != null&&user.getState()==1) {
+            session.setAttribute("username",username);
             return "success";
         } else {
             return "login";
@@ -210,5 +211,26 @@ public class UserController {
             return "reset";
         }
         return "findPwd";
+    }
+
+    //修改个人信息
+    @RequestMapping("/modInfor")
+    public String modIfor(){
+        return "modInfor";
+    }
+    @RequestMapping("/doModInfor")
+    public String doModInfor(HttpServletRequest request,HttpSession session){
+        String username = (String) session.getAttribute("username");
+        String nickname = request.getParameter("nickname");
+        String sex = request.getParameter("sex");
+        String autorgragh = request.getParameter("autorgragh");
+        String permail = request.getParameter("permail");
+        User user = userService.findByName(username);
+        user.setNickname(nickname);
+        user.setSex(sex);
+        user.setAutorgragh(autorgragh);
+        user.setPermail(permail);
+        userService.save(user);
+        return "login";
     }
 }
