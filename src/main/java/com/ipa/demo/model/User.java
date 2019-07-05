@@ -1,5 +1,7 @@
 package com.ipa.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 
 
@@ -21,13 +23,21 @@ public class User {
     //用户验证码
     private String verCode;
 
+    @JsonIgnore
     //用户激活状态：0表示未激活，1表示已激活
     private int state;
 
+    //用户昵称
     private String nickname;
+
+    //用户性别
     private String sex;
-    private String autorgragh;
-    private String permail;
+
+    //个性签名
+    private String autorGragh;
+
+    //邮箱
+    private String perMail;
 
     public Integer getId() {
         return id;
@@ -73,15 +83,15 @@ public class User {
         this.sex = sex;
     }
     public String getAutorgragh(){
-        return autorgragh;
+        return autorGragh;
     }
     public void setAutorgragh(String autorgragh){
-        this.autorgragh = autorgragh;
+        this.autorGragh = autorgragh;
     }
     public String getPermail(){
-        return permail;
+        return perMail;
     }
     public void setPermail(String permail){
-        this.permail = permail;
+        this.perMail = permail;
     }
 }

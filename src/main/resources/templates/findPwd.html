@@ -162,18 +162,59 @@ $("#c").ready(e());
     <form method="post" target="_blank" name="findFrame">
         <input type="email" id="email" name="username" placeholder="请输入您的注册邮箱...">
         <input type="text" id="verify" name="verCode" placeholder="请输入验证码...">
-        <input type="submit" id="btn_vcode" value="发送验证码" onclick="sendFindCode()">
-        <input type="submit" id="btn_next" name="nextstep" value="下一步" onclick="verifyCode()">
+        <input type="button" id="btn_vcode" value="发送验证码">
+        <input type="button" id="btn_next" name="nextstep" value="下一步">
     </form>
 
 </div>
 <script>
-    function sendFindCode() {
-        document.findFrame.action="/front/sendFindCode"
-    }
-    function verifyCode() {
-        document.findFrame.action="/front/verifyFindCode"
-    }
+    jQuery(document).ready(function () {
+        $("#btn_vcode").on("click",function () {
+
+            var username=$("#email").val();
+            if(username==""){
+                alert("邮箱不能为空");
+            }
+            $.ajax({
+                type:"POST",
+                // dataType:"text",
+                // contentType:"application/json;charset=UTF-8",
+                url:"/front/sendFindCode",
+                data:{
+                    username:username
+                },
+                success:function () {
+                },
+                error:function () {
+                    alert("发送失败");
+                }
+            })
+        })
+        $("#btn_next").on("click",function () {
+            var username=$("#email").val();
+            var verCode=$("#verify").val();
+            var person={
+                username:username,
+                verCode:verCode
+            };
+            $.ajax({
+                type:"POST",
+                contentType:"application/json;charset=UTF-8",
+                url:"/front/verifyFindCode",
+                data:JSON.stringify(person),
+                success:function (data) {
+                    if(data=="success"){
+                        window.location.href="/front/reset";
+                    }else{
+                        alert("验证失败");
+                    }
+                },
+                error:function () {
+                    alert("请求失败");
+                }
+            })
+        })
+    })
 </script>
 
 </body>

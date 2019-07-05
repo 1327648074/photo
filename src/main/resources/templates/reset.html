@@ -177,16 +177,43 @@ $("#c").ready(e());
 <div id="b" ></div>
 <div id="c"></div>
 <div id="reset_frame">
-    <form method="post" action="/front/doFindPwd">
+    <form method="post">
         <label>输入新密码</label><br>
         <input type="password" id="newpwd" name="pwd1" placeholder="请输入您的新密码..." required="true" missingMessage="密码必须填写">
         <label>再次输入密码</label><br>
         <input type="password" id="newpwdAgain" name="pwd2" placeholder="请再次输入您的新密码..." required="true" missingMessage="密码必须填写" onkeyup="validate()">
         <label><span id="tishi"></span></label><br>
-        <input type="submit" id="btn_reset" value="重置密码">
+        <input type="button" id="btn_reset" value="重置密码">
         <a href=/front/login>放弃更改并返回首页</a>
     </form>
 </div>
-
 </body>
+<script>
+    jQuery(document).ready(function () {
+        $("#btn_reset").on("click",function () {
+            var pwd1=$("#newpwd").val();
+            var pwd2=$("#newpwdAgain").val();
+            var password={
+                pwd1:pwd1,
+                pwd2:pwd2
+            };
+            $.ajax({
+                type:"POST",
+                contentType:"application/json;charset=UTF-8",
+                url:"/front/resetPwd",
+                data:JSON.stringify(password),
+                success:function (data) {
+                    if(data=="success"){
+                        window.location.href="/front/reset_success";
+                    }else{
+                        alert("重置失败，请检查密码是否一致");
+                    }
+                },
+                error:function () {
+                    alert("请求失败");
+                }
+            })
+        })
+    })
+</script>
 </html>
