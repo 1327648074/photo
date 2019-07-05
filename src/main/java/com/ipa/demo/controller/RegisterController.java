@@ -14,7 +14,7 @@ import static com.ipa.demo.controller.UserController.createVerCode;
 
 @Controller
 @RequestMapping("/front")
-public class registerController {
+public class RegisterController {
     @Autowired
     UserService userService;
     MailUtil mailUtil;

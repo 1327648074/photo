@@ -16,15 +16,6 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    //判断是否已经注册,true代表已经注册，false代表未注册
-    public  Boolean registerUser(String username) {
-        if (userService.findByName(username)==null) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     //生成验证码
     public static String createVerCode(){
         String verCode="";
@@ -59,11 +50,9 @@ public class UserController {
     @RequestMapping("/findPwd")
     public String findPwd(){ return "findPwd"; }
 
-    //发送验证码界面
-    @RequestMapping("/verCode")
-    public String verCode(){
-        return "verCode";
-    }
+    //主界面
+    @RequestMapping("/mainUI")
+    public String mainUI(){return "mainUI";}
 
     //注册成功界面
     @RequestMapping("/register_success")
@@ -76,26 +65,6 @@ public class UserController {
     //重置密码界面
     @RequestMapping("/reset")
     public String reset(){return "reset";}
-
-    //成功登陆界面
-    @RequestMapping("/success")
-    public String success(){return "success";}
-
-    //执行登录
-    @RequestMapping("/doLogin")
-    public String login(HttpServletRequest request,HttpSession session) {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        User user = userService.FindNameAndPsw(username, password);
-        if (user != null&&user.getState()==1) {
-            session.setAttribute("username",username);
-            return "success";
-        } else {
-            return "login";
-        }
-    }
-
-
 
     //修改个人信息
     @RequestMapping("/modInfo")

@@ -186,24 +186,56 @@ $("#c").ready(e());
 <div id="b" ></div>
 <div id="c"></div>
 <div id="login_frame" >
-    <form method="post" action="/front/doLogin">
+    <form method="post">
         <label for="email">账号</label><br>
         <input type="email" id="email" name="username" placeholder="请输入您的Email地址"><br>
 
         <label for="password">密码</label><br>
         <input type="password" id="password" name="password" placeholder="请输入您的密码"><br><br>
 
-        <input type=submit id="btn_login" value="登录" onclick="login();"/><br><br>
+        <input type=button id="btn_login" value="登录"><br><br>
 
 <div id="forget" style="float:right;">
         <a href="/front/findPwd" class="one">忘记密码</a>
 </div>
 <div id="register" style="float:left;">
         <a href="/front/register" class="two">快速注册</a>
-</div>
-    <br>
+</div><br>
     </form>
 </div>
-
 </body>
+<script>
+    jQuery(document).ready(function () {
+        $("#btn_login").on("click",function () {
+            var username=$("#email").val();
+            var pwd=$("#password").val();
+            var user={
+                username:username,
+                pwd:pwd
+            };
+            if(username==""){
+                alert("邮箱不能为空");
+            }
+            if(pwd==""){
+                alert("请输入密码");
+            }
+            $.ajax({
+                type:"POST",
+                contentType:"application/json;charset=UTF-8",
+                url:"/front/doLogin",
+                data:JSON.stringify(user),
+                success:function (data) {
+                    if(data=="success"){
+                        window.location.href="/front/mainUI";
+                    }else{
+                        alert("登陆失败");
+                    }
+                },
+                error:function () {
+                    alert("请求失败");
+                }
+            })
+        })
+    })
+</script>
 </html>
