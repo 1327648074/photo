@@ -87,7 +87,6 @@ public class UserController {
         return "login";
     }
 
-
     @GetMapping(value = "sad")
     @ResponseBody
     public  User find(@RequestParam(value = "name")String name){

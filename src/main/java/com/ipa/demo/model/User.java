@@ -1,10 +1,7 @@
 package com.ipa.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Entity;
-
-
 import javax.persistence.*;
 
 @Entity
@@ -42,30 +39,39 @@ public class User {
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
+
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
+
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
+
     public int getState() {
         return state;
     }
+
     public void setState(int state) {
         this.state = state;
     }
+
     public String getVerCode() {
         return verCode;
     }
+
     public void setVerCode(String verCode) {
         this.verCode = verCode;
     }
@@ -73,24 +79,31 @@ public class User {
     public String getNickname(){
         return nickname;
     }
+
     public void setNickname(String nickname){
         this.nickname = nickname;
     }
+
     public String getSex(){
         return sex;
     }
+
     public void setSex(String sex){
         this.sex = sex;
     }
+
     public String getAutorgragh(){
         return autorGragh;
     }
+
     public void setAutorgragh(String autorgragh){
         this.autorGragh = autorgragh;
     }
+
     public String getPermail(){
         return perMail;
     }
+
     public void setPermail(String permail){
         this.perMail = permail;
     }
