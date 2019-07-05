@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.security.GeneralSecurityException;
 import java.util.Map;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/front")
@@ -27,18 +28,18 @@ public class FindPwdController {
         if(userService.findByName(username)!=null&&user1.getState()==1){
             try {
                 mailUtil.send_mail(username, "你的验证码是"+verCode);
+                Date sendTime=new Date();
                 System.out.println("邮件发送成功!");
                 user1.setVerCode(verCode);
                 userService.save(user1);
                 httpSession.setAttribute("mail",username);
-//                return "verCode";
+                httpSession.setAttribute("sendFindTime",sendTime);
             } catch (javax.mail.MessagingException e) {
                 e.printStackTrace();
             } catch (GeneralSecurityException e) {
                 e.printStackTrace();
             }
         }
-//        return "findPwd";
     }
 
     //验证验证码

@@ -226,6 +226,7 @@ $("#c").ready(e());
                 data:JSON.stringify(user),
                 success:function (data) {
                     if(data=="success"){
+                        sessionStorage.setItem("username",username);
                         window.location.href="/front/mainUI";
                     }else{
                         alert("登陆失败");
