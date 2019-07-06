@@ -5,6 +5,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 import java.util.Random;
 import com.ipa.demo.model.User;
 import com.ipa.demo.service.UserService;
@@ -51,8 +53,8 @@ public class UserController {
     public String findPwd(){ return "findPwd"; }
 
     //主界面
-    @RequestMapping("/mainUI")
-    public String mainUI(){return "mainUI";}
+    @RequestMapping("/home")
+    public String home(){return "home";}
 
     //注册成功界面
     @RequestMapping("/register_success")
@@ -66,30 +68,58 @@ public class UserController {
     @RequestMapping("/reset")
     public String reset(){return "reset";}
 
-    //修改个人信息
-    @RequestMapping("/modInfo")
-    public String modIfo(){
-        return "modInfo";
-    }
-    @RequestMapping("/doModInfo")
-    public String doModInfo(HttpServletRequest request,HttpSession session){
-        String username = (String) session.getAttribute("username");
-        String nickname = request.getParameter("nickname");
-        String sex = request.getParameter("sex");
-        String autorGragh = request.getParameter("autorgragh");
-        String perMail = request.getParameter("permail");
-        User user = userService.findByName(username);
-        user.setNickname(nickname);
-        user.setSex(sex);
-        user.setAutorgragh(autorGragh);
-        user.setPermail(perMail);
-        userService.save(user);
-        return "login";
+    //修改密码界面
+    @RequestMapping("/changePwd")
+    public String changePwd(){
+        return "changePwd";
     }
 
-    @GetMapping(value = "sad")
+    @RequestMapping("/ifo")
+    public String ifo(){return "ifo";}
+
+    //修改密码
+    @PostMapping("/doChangePwd")
     @ResponseBody
-    public  User find(@RequestParam(value = "name")String name){
-        return userService.findByName(name);
+    public void doChangePwd(@RequestBody Map<String,String> map){
+        String username=map.get("username");
+        String oldPwd=map.get("oldPwd");
+        String newPwd1=map.get("newPwd1");
+        String newPwd2=map.get("newPwd2");
+        User user=userService.findByName(username);
+        if(oldPwd.equals(user.getPassword())){
+            if(newPwd1.equals(newPwd2)){
+                user.setPassword(newPwd1);
+                userService.save(user);
+            }
+        }
     }
+
+//    //修改个人信息
+//    @RequestMapping("/modInfo")
+//    public String modIfo(){
+//        return "modInfo";
+//    }
+//    @RequestMapping("/doModInfo")
+//    public String doModInfo(HttpServletRequest request,HttpSession session){
+//        String username = (String) session.getAttribute("username");
+//        String nickname = request.getParameter("nickname");
+//        String sex = request.getParameter("sex");
+//        String autorGragh = request.getParameter("autorgragh");
+//        String perMail = request.getParameter("permail");
+//        User user = userService.findByName(username);
+//        user.setNickname(nickname);
+//        user.setSex(sex);
+//        user.setAutorgragh(autorGragh);
+//        user.setPermail(perMail);
+//        userService.save(user);
+//        return "login";
+//    }
+//
+//
+//
+//    @GetMapping(value = "sad")
+//    @ResponseBody
+//    public  User find(@RequestParam(value = "name")String name){
+//        return userService.findByName(name);
+//    }
 }
