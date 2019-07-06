@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "images")
+@RequestMapping("/image")
 public class ImageController {
 
     private static String ROOT = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\image";
@@ -81,22 +81,24 @@ public class ImageController {
 
     //图片数据库操作
     //上传图片
-    @PostMapping(value = "/upload")
-    public String imageUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    @RequestMapping(value = "/doUpload")
+    public String imageUpload(@RequestParam("file") MultipartFile file) {
         //判断是否为空
 
-        if (file.isEmpty()) return "fail to upload";
-        String path = request.getParameter("path");
+        if (file.isEmpty()) return "fail";
+        String path = null;
         String cpath = getCpath(path);
-        return imageService.upload(file, cpath);
+        imageService.upload(file, cpath);
+        System.out.println(FilePath+"\\"+file.getOriginalFilename());
+        return FilePath+"\\"+file.getOriginalFilename();
     }
 
     @PostMapping(value = "/uploads")
-    public String imageUpload(@RequestParam("file") MultipartFile[] file, HttpServletRequest request) {
+    public String imageUpload(@RequestParam("file") MultipartFile[] file) {
         //判断是否为空
         for (int i = 0; i < file.length; i++) {
             if (file[i].isEmpty()) return "fail to save for empty";
-            String path = request.getParameter("path");
+            String path = null;
             String cpath = getCpath(path);
             imageService.upload(file[i], cpath);
         }

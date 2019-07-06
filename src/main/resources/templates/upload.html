@@ -1,0 +1,202 @@
+﻿<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>图片上传</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    body {
+        background: rgba(181, 236, 238, 0.2);
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    input[type=button], input[type=submit] {
+        width: 10%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    #images_show{
+        text-align:center;
+    }
+
+
+</style>
+
+<script type="text/javascript">
+    //处理file input加载的图片文件
+    $(document).ready(function (e) {
+        $("#selectfile").click(function () {
+            $("#browsefile").trigger('click');
+        });
+        $("#clear").click(function () {
+            $("#images_show").empty();
+            $("#browsefile").val('');
+        });
+
+
+        //判断浏览器是否有FileReader接口
+        if (typeof FileReader == 'undefined') {
+            /*$("#images_show").css({'background':'none'}).html('亲,您的浏览器还不支持HTML5的FileReader接口,无法使用图片本地预览,请更新浏览器获得最好体验');*/
+            //如果浏览器是ie
+            if ($.browser.msie === true) {
+                //ie6直接用file input的value值本地预览
+                if ($.browser.version == 6) {
+                    $("#browsefile").change(function (event) {
+                        //ie6下怎么做图片格式判断?
+                        var src = event.target.value;
+                        //var src = document.s election.createRange().text;    //选中后 selection对象就产生了 这个对象只适合ie
+                        var img = '<img src="' + src + '" width="200px" height="200px" />';
+                        $("#images_show").append(img);
+                    });
+                }
+                //ie7,8使用滤镜本地预览
+                else if ($.browser.version == 7 || $.browser.version == 8) {
+                    $("#browsefile").change(function (event) {
+                        $(event.target).select();
+                        var src = document.selection.createRange().text;
+                        var dom = document.getElementById('images_show');
+                        console.log(src);
+                        //使用滤镜 成功率高
+                        $("#images_show").css({"filter": "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)"});
+                        /*dom.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src= src;*/
+                        dom.innerHTML = '<img id="head" alt=" " src=+src+ />';
+                        //使用和ie6相同的方式 设置src为绝对路径的方式 有些图片无法显示 效果没有使用滤镜好
+                        /*var img = '<img src="'+src+'" width="200px" height="200px" />';
+                        $("#images_show").append(img);*/
+                    });
+                }
+            }
+            //如果是不支持FileReader接口的低版本firefox 可以用getAsDataURL接口
+            else if ($.browser.mozilla === true) {
+                $("#browsefile").change(function (event) {
+                    //firefox2.0没有event.target.files这个属性 就像ie6那样使用value值 但是firefox2.0不支持绝对路径嵌入图片 放弃firefox2.0
+                    //firefox3.0开始具备event.target.files这个属性 并且开始支持getAsDataURL()这个接口 一直到firefox7.0结束 不过以后都可以用HTML5的FileReader接口了
+                    if (event.target.files) {
+                        //console.log(event.target.files);
+                        for (var i = 0; i < event.target.files.length; i++) {
+                            var img = '<img src="' + event.target.files.item(i).getAsDataURL() + '" width="200px" height="200px"/>';
+                            $("#images_show").append(img);
+                        }
+                    } else {
+                        //console.log(event.target.value);
+                        //$("#imgPreview").attr({'src':event.target.value});
+                    }
+                });
+            }
+        } else {
+            //多图上传 input file控件里指定multiple属性 e.target是dom类型
+            $("#browsefile").change(function (e) {
+                for (var i = 0; i < e.target.files.length; i++) {
+                    var file = e.target.files.item(i);
+                    //允许文件MIME类型 也可以在input标签中指定accept属性
+                    //console.log(/^image\/.*$/i.test(file.type));
+                    if (!(/^image\/.*$/i.test(file.type))) {
+                        continue;      //不是图片 就跳出这一次循环
+                    }
+                    //实例化FileReader API
+                    var freader = new FileReader();
+                    freader.readAsDataURL(file);
+                    freader.onload = function (e) {
+                        var img = '<div class="imgshow"></div><img src="' + e.target.result + '" /></div>';
+                        $("#images_show").append(img);
+
+                    }
+                }
+            });
+            //处理图片拖拽的代码
+            var destDom = document.getElementById('images_show');
+            destDom.addEventListener('dragover', function (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }, false);
+            destDom.addEventListener('drop', function (event) {
+                event.stopPropagation();
+                event.preventDefault();
+                var img_file = event.dataTransfer.files.item(0);        //获取拖拽过来的文件信息 暂时取一个
+                //console.log(event.dataTransfer.files.item(0).type);
+                if (!(/^image\/.*$/.test(img_file.type))) {
+                    alert('您还未拖拽任何图片过来,或者您拖拽的不是图片文件');
+                    return false;
+                }
+                fReader = new FileReader();
+                fReader.readAsDataURL(img_file);
+                fReader.onload = function (event) {
+                    destDom.innerHTML = '';
+                    destDom.innerHTML = '<div class="imgshow"><img src="' + event.target.result + '"/></div>';
+                    /*这里添加ajax调用后台函数的代码*/
+                };
+            }, false);
+        }
+    });
+</script>
+<body>
+<form>
+    <input type="file" id="browsefile" name="file" style="display:none">
+    <input type="button" id="selectfile" value="选择文件">
+    <input type="button" id="upload" value="确认上传">
+    <input type="button" id="clear" value="清除预览区">
+</form>
+<div class="images_show" id="images_show">
+</div>
+
+</body>
+<script>
+    $("#upload").on("click",function () {
+        var formData = new FormData();
+        formData.append("file", document.getElementById("browsefile").files[0]);
+        $.ajax({
+            url: "/image/doUpload",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if(data=="fail"){
+                    alert("上传失败");
+                }else {
+                    var path={path:data};
+                    $.ajax({
+                        type:"POST",
+                        url:"/front/doAnalyze",
+                        contentType: "application/json;charset=UTF-8",
+                        data:JSON.stringify(path),
+                        success:function (data) {
+                            var r=confirm("你的图片为："+data+"!是否放入推荐相册中？");
+                            if(r){
+                                alert("收到");
+                            }else {
+                                alert("请");
+                            }
+                        },
+                        error:function () {
+                            alert("分析失败");
+                        }
+                    })
+                }
+                $("#images_show").empty();
+                $("#browsefile").val('');
+
+                // alert(data);
+            },
+            error: function () {
+                alert("上传失败！");
+            }
+        })
+    })
+
+</script>
+</html>

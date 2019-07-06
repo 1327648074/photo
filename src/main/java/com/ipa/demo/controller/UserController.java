@@ -96,6 +96,12 @@ public class UserController {
     @RequestMapping("/changeInfo")
     public String changeInfo(){return "changeInfo";}
 
+    //上传图片界面
+    @RequestMapping("/upload")
+    public String upload(){
+        return "upload";
+    }
+
     //修改密码
     @PostMapping("/doChangePwd")
     @ResponseBody

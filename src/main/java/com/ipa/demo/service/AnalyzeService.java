@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.tensorflow.DataType;
 import org.tensorflow.Graph;
 import org.tensorflow.Output;
@@ -16,6 +17,7 @@ import org.tensorflow.Session;
 import org.tensorflow.Tensor;
 import org.tensorflow.types.UInt8;
 
+@Service
 public class AnalyzeService {
     public String analyze(String path) {
         String modelDir = "src/main/inception";
@@ -38,12 +40,11 @@ public class AnalyzeService {
             } else {
                 return "其他";
             }
-
         }
 
     }
 
-    private static Tensor<Float> constructAndExecuteGraphToNormalizeImage(byte[] imageBytes) {
+    private  Tensor<Float> constructAndExecuteGraphToNormalizeImage(byte[] imageBytes) {
         try (Graph g = new Graph()) {
             GraphBuilder b = new GraphBuilder(g);
 //            Some constants specific to the pre-trained model at:
@@ -67,7 +68,7 @@ public class AnalyzeService {
         }
     }
 
-    private static float[] executeInceptionGraph(byte[] graphDef, Tensor<Float> image) {
+    private float[] executeInceptionGraph(byte[] graphDef, Tensor<Float> image) {
         try (Graph g = new Graph()) {
             g.importGraphDef(graphDef);
             try (Session s = new Session(g);
@@ -83,7 +84,7 @@ public class AnalyzeService {
         }
     }
 
-    private static int maxIndex(float[] probabilities) {
+    private int maxIndex(float[] probabilities) {
         int best = 0;
         for (int i = 1; i < probabilities.length; ++i) {
             if (probabilities[i] > probabilities[best]) {
@@ -93,7 +94,7 @@ public class AnalyzeService {
         return best;
     }
 
-    private static byte[] readAllBytesOrExit(Path path) {
+    private byte[] readAllBytesOrExit(Path path) {
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {
@@ -103,7 +104,7 @@ public class AnalyzeService {
         return null;
     }
 
-    private static List<String> readAllLinesOrExit(Path path) {
+    private List<String> readAllLinesOrExit(Path path) {
         try {
             return Files.readAllLines(path, Charset.forName("UTF-8"));
         } catch (IOException e) {
@@ -116,7 +117,7 @@ public class AnalyzeService {
     // In the fullness of time, equivalents of the methods of this class should be auto-generated from
     // the OpDefs linked into libtensorflow_jni.so. That would match what is done in other languages
     // like Python, C++ and Go.
-    static class GraphBuilder {
+     class GraphBuilder {
         GraphBuilder(Graph g) {
             this.g = g;
         }

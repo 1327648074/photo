@@ -45,7 +45,7 @@ public class ImageService {
                 image.setSize(file.getSize());
                 image.setType("img");
                 imageRepository.save(image);
-                return "success to upload";
+                return "success";
             } catch (IllegalStateException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -95,17 +95,11 @@ public class ImageService {
                 if (fis != null) {
                     try {
                         fis.close();
-//                            return "322";
                     } catch (IOException e) {
                         e.printStackTrace();
-//                            return "3222";
                     }
                 }
             }
         }
-
-
     }
-
-
 }
