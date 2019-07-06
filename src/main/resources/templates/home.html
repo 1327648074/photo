@@ -9,12 +9,11 @@
         function show_confirm() {
             var r = confirm("确定要退出登录吗？");
             if (r == true) {
-                window.location.href = "login.html";
+                window.location.href = "/front/index";
             }
         }
     </script>
     <script>
-
         $(function () {
             $(".menu-list .first-menu").click(function () {
                 $(this).addClass("active").siblings().removeClass("active");
@@ -279,7 +278,6 @@
         <ul>
             <li class="first-menu">
                 <a href="/3dphotos.html" target="myframe"><i class="i-icon"><span class="hover-tit">我的图片</span></i></a>
-
             </li>
             <li class="first-menu">
                 <a href="javascript:;"><i class="i-icon"><span class="hover-tit">个性设置</span></i></a>
@@ -288,7 +286,7 @@
                         <a href="/front/changePwd" target="myframe">更改密码</a>
                     </li>
                     <li class="second-menu">
-                        <a href="/front/ifo" target="myframe">个人信息</a>
+                        <a href="/front/info" target="myframe">个人信息</a>
                     </li>
                 </ul>
             </li>

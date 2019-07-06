@@ -86,10 +86,15 @@ public class UserController {
         return "changePwd";
     }
 
-    @RequestMapping("/ifo")
-    public String ifo() {
-        return "ifo";
+    //个人信息界面
+    @RequestMapping("/info")
+    public String info() {
+        return "info";
     }
+
+    //修改信息界面
+    @RequestMapping("/changeInfo")
+    public String changeInfo(){return "changeInfo";}
 
     //修改密码
     @PostMapping("/doChangePwd")
@@ -108,32 +113,4 @@ public class UserController {
         }
     }
 
-//    //修改个人信息
-//    @RequestMapping("/modInfo")
-//    public String modIfo(){
-//        return "modInfo";
-//    }
-//    @RequestMapping("/doModInfo")
-//    public String doModInfo(HttpServletRequest request,HttpSession session){
-//        String username = (String) session.getAttribute("username");
-//        String nickname = request.getParameter("nickname");
-//        String sex = request.getParameter("sex");
-//        String autorGragh = request.getParameter("autorgragh");
-//        String perMail = request.getParameter("permail");
-//        User user = userService.findByName(username);
-//        user.setNickname(nickname);
-//        user.setSex(sex);
-//        user.setAutorgragh(autorGragh);
-//        user.setPermail(perMail);
-//        userService.save(user);
-//        return "login";
-//    }
-//
-//
-//
-//    @GetMapping(value = "sad")
-//    @ResponseBody
-//    public  User find(@RequestParam(value = "name")String name){
-//        return userService.findByName(name);
-//    }
 }

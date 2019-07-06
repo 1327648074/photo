@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#ifo_frame").fadeIn("slow");
+        });
+    </script>
+    <style>
+        p{
+            width: 80%;
+            display: inline;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+        label{
+            font-size: 20px;
+        }
+        #btn_changeIfo{
+            width: 80%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+        }
+        #btn_changeIfo:hover{
+            background-color: #45a049;
+        }
+        #ifo_frame{
+            margin:180px 120px 10px 280px;
+            border-style: none;
+            border-radius: 5px;
+            background-color: #D1E1FA;
+            padding: 50px 350px;
+            opacity:0.7;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="ifo_frame">
+    <label for="nickname">昵称：</label>
+    <p id="nickname"></p><br><br>
+    <label for="email">邮箱：</label>
+    <p id="email"></p><br><br>
+    <label for="sex">性别：</label>
+    <p id="sex"></p><br><br>
+    <label for="sign">签名：</label>
+    <p id="sign"></p><br><br><br>
+    <input type="button" id="btn_changeIfo" value="修改个人信息">
+</div>
+</body>
+<script>
+    jQuery(document).ready(function () {
+        var username=sessionStorage.getItem("username");
+        $.ajax({
+            type:"POST",
+            url:"/front/getInfo",
+            data:{
+                username:username
+            },
+            success:function (data) {
+                document.getElementById("nickname").innerHTML=data.nickname;
+                document.getElementById("sex").innerHTML=data.sex;
+                document.getElementById("sign").innerHTML=data.autorgragh;
+                document.getElementById("email").innerHTML=data.permail;
+            },
+            error:function () {
+                alert("请求失败");
+            }
+        })
+        $("#btn_changeIfo").on("click",function () {
+            window.location.href="/front/changeInfo";
+        })
+    })
+</script>
+</html>
