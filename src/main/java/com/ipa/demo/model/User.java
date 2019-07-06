@@ -1,6 +1,7 @@
 package com.ipa.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.*;
 
@@ -76,35 +77,35 @@ public class User {
         this.verCode = verCode;
     }
 
-    public String getNickname(){
+    public String getNickname() {
         return nickname;
     }
 
-    public void setNickname(String nickname){
+    public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
-    public String getSex(){
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(String sex){
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
-    public String getAutorgragh(){
+    public String getAutorgragh() {
         return autorGragh;
     }
 
-    public void setAutorgragh(String autorgragh){
+    public void setAutorgragh(String autorgragh) {
         this.autorGragh = autorgragh;
     }
 
-    public String getPermail(){
+    public String getPermail() {
         return perMail;
     }
 
-    public void setPermail(String permail){
+    public void setPermail(String permail) {
         this.perMail = permail;
     }
 }

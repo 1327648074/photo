@@ -7,13 +7,13 @@ function login() {
 
         alert("请输入用户名");
 
-    } else if (pass.value  == "") {
+    } else if (pass.value == "") {
 
         alert("请输入密码");
 
-    } else if(username.value == "zzw@250" && pass.value == "123456"){
+    } else if (username.value == "zzw@250" && pass.value == "123456") {
 
-        window.location.href="view.html";
+        window.location.href = "view.html";
 
     } else {
 

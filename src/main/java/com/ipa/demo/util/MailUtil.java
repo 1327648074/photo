@@ -1,4 +1,5 @@
 package com.ipa.demo.util;
+
 import com.sun.mail.util.MailSSLSocketFactory;
 
 import javax.mail.*;
@@ -13,10 +14,11 @@ import java.util.Properties;
 public class MailUtil {
     /**
      * 发送邮件
-     * @param to 给谁发
+     *
+     * @param to   给谁发
      * @param text 发送内容
      */
-    public static void send_mail(String to,String text) throws MessagingException, GeneralSecurityException {
+    public static void send_mail(String to, String text) throws MessagingException, GeneralSecurityException {
         //创建连接对象 连接到邮件服务器
         Properties properties = new Properties();
         //设置发送邮件的基本参数
@@ -34,7 +36,7 @@ public class MailUtil {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 //两个参数分别是发送邮件的账户和密码
-                return new PasswordAuthentication("937027392@qq.com","jzchzhyjxklwbbbi");
+                return new PasswordAuthentication("937027392@qq.com", "jzchzhyjxklwbbbi");
             }
         });
 
@@ -43,11 +45,11 @@ public class MailUtil {
         //设置发件人
         message.setFrom(new InternetAddress("937027392@qq.com"));
         //设置收件人
-        message.setRecipient(Message.RecipientType.TO,new InternetAddress(to));
+        message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
         //设置主题
         message.setSubject("智能图片整理系统");
         //设置邮件正文  第二个参数是邮件发送的类型
-        message.setContent(text,"text/html;charset=UTF-8");
+        message.setContent(text, "text/html;charset=UTF-8");
         //发送一封邮件
         Transport.send(message);
     }

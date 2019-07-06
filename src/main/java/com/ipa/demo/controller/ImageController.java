@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,10 +33,10 @@ import java.util.List;
 @RequestMapping(value = "images")
 public class ImageController {
 
-    private  static String ROOT = System.getProperty("user.dir")+"\\src\\main\\resources\\static\\image";
-    private static  String FilePath = System.getProperty("user.dir")+"\\src\\main\\resources\\static\\image";
-    private static String USER="";
-    private static String VISIT ="";
+    private static String ROOT = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\image";
+    private static String FilePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\image";
+    private static String USER = "";
+    private static String VISIT = "";
 
     @Autowired
     private ImageRepository imageRepository;
@@ -45,58 +46,59 @@ public class ImageController {
 
     //登入登出操作
     @RequestMapping(value = "/login")
-    public void Login (@RequestParam(value = "user") String user){
+    public void Login(@RequestParam(value = "user") String user) {
 
         createFolder(user, null);
         FilePath = ROOT + "\\" + user;
-        USER =user;
-        VISIT =user;
+        USER = user;
+        VISIT = user;
     }
-    @RequestMapping(value = "/visit")
-    public void Visit(@RequestParam(value = "user")String user){
 
-        FilePath = ROOT+"\\"+user;
+    @RequestMapping(value = "/visit")
+    public void Visit(@RequestParam(value = "user") String user) {
+
+        FilePath = ROOT + "\\" + user;
         VISIT = user;
     }
 
     @RequestMapping(value = "/Logout")
-    public void Logout (@RequestParam(value = "user") String user){
+    public void Logout(@RequestParam(value = "user") String user) {
         FilePath = FilePath.replace("\\" + user, "");
         USER = "";
     }
 
     //文件夹访问
     @RequestMapping(value = "/access")
-    public void Access(@RequestParam(value = "name") String name){
+    public void Access(@RequestParam(value = "name") String name) {
         FilePath = FilePath + "\\" + name;
     }
 
 
     @RequestMapping(value = "/return")
-    public void Return(@RequestParam(value = "name") String name){
+    public void Return(@RequestParam(value = "name") String name) {
         FilePath = FilePath.replace("\\" + name, "");
     }
 
     //图片数据库操作
     //上传图片
     @PostMapping(value = "/upload")
-    public String imageUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+    public String imageUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         //判断是否为空
 
-        if(file.isEmpty())  return "fail to upload";
+        if (file.isEmpty()) return "fail to upload";
         String path = request.getParameter("path");
-        String cpath=getCpath(path);
-        return imageService.upload(file,cpath);
+        String cpath = getCpath(path);
+        return imageService.upload(file, cpath);
     }
 
     @PostMapping(value = "/uploads")
-    public String imageUpload(@RequestParam("file") MultipartFile[] file,HttpServletRequest request){
+    public String imageUpload(@RequestParam("file") MultipartFile[] file, HttpServletRequest request) {
         //判断是否为空
-        for (int i =0;i<file.length;i++) {
+        for (int i = 0; i < file.length; i++) {
             if (file[i].isEmpty()) return "fail to save for empty";
             String path = request.getParameter("path");
-            String cpath=getCpath(path);
-            imageService.upload(file[i],cpath);
+            String cpath = getCpath(path);
+            imageService.upload(file[i], cpath);
         }
         return "success";
     }
@@ -106,9 +108,9 @@ public class ImageController {
     public void downloadImage(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         String path = request.getParameter("path");
-        Image image = imageRepository.findByNameAndUrl(name,path);
+        Image image = imageRepository.findByNameAndUrl(name, path);
         try {
-            imageService.downloadImage(path,name, response);
+            imageService.downloadImage(path, name, response);
         } catch (Exception e) {
             e.getMessage();
         }
@@ -116,7 +118,7 @@ public class ImageController {
 
     //查询操作
     @GetMapping(value = "/findAll")
-    public List<Image> girlList(){
+    public List<Image> girlList() {
         return imageRepository.findAll();
     }
 
@@ -162,10 +164,10 @@ public class ImageController {
     //图片管理
     //创建新文件夹
     @RequestMapping("/createFolder")
-    public String createFolder(@RequestParam String folderName,@RequestParam(value = "path")String path) {
+    public String createFolder(@RequestParam String folderName, @RequestParam(value = "path") String path) {
         try {
-            String cpath=getCpath(path);
-            File newDir = new File(cpath+"\\"+folderName);
+            String cpath = getCpath(path);
+            File newDir = new File(cpath + "\\" + folderName);
             if (!newDir.mkdir()) {
                 throw new Exception("不能创建目录: " + folderName);
             }
@@ -184,48 +186,46 @@ public class ImageController {
 
     //复制
     @RequestMapping("copy")
-    public String copy(@RequestParam(value = "path")String path,@RequestParam(value = "name")String name, @RequestParam(value = "newPath")String newPath,HttpServletRequest request) {
+    public String copy(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name, @RequestParam(value = "newPath") String newPath, HttpServletRequest request) {
 
-        String cpath =getCpath(path);
+        String cpath = getCpath(path);
         try {
-            if(imageRepository.findByNameAndUrl(name,FilePath+"\\"+newPath)==null)
-            {
+            if (imageRepository.findByNameAndUrl(name, FilePath + "\\" + newPath) == null) {
                 File srcFile = new File(cpath, name);
-                File destFile = new File(FilePath + "\\"+newPath, name);
+                File destFile = new File(FilePath + "\\" + newPath, name);
                 if (srcFile.isFile()) {
                     FileUtils.copyFile(srcFile, destFile);
-                    Image image1 = imageRepository.findByNameAndUrl(name,cpath);
-                    Image image2= new Image();
+                    Image image1 = imageRepository.findByNameAndUrl(name, cpath);
+                    Image image2 = new Image();
                     image2.setName(image1.getName());
                     image2.setSize(image1.getSize());
-                    image2.setUrl(FilePath+"\\"+newPath);
+                    image2.setUrl(FilePath + "\\" + newPath);
                     image2.setType(image1.getType());
                     image2.setCreatedDate(getTime());
                     imageRepository.save(image2);
                 } else {
                     FileUtils.copyDirectory(srcFile, destFile);
-                    Image dir1 = imageRepository.findByNameAndUrl(name,cpath);
+                    Image dir1 = imageRepository.findByNameAndUrl(name, cpath);
                     Image dir2 = new Image();
                     dir2.setType(dir1.getType());
                     dir2.setName(dir1.getName());
-                    dir2.setUrl(FilePath+"\\"+newPath);
+                    dir2.setUrl(FilePath + "\\" + newPath);
                     dir2.setCreatedDate(getTime());
                     imageRepository.save(dir2);
-                    List<Image> list = imageRepository.findByUrl(cpath+"\\"+name);
-                    for (int i=0;i<list.size();i++){
+                    List<Image> list = imageRepository.findByUrl(cpath + "\\" + name);
+                    for (int i = 0; i < list.size(); i++) {
                         Image image1 = list.get(i);
-                        Image image2= new Image();
+                        Image image2 = new Image();
                         image2.setName(image1.getName());
                         image2.setSize(image1.getSize());
                         image2.setType(image1.getType());
-                        image2.setUrl(FilePath+"\\"+newPath+"\\"+name);
+                        image2.setUrl(FilePath + "\\" + newPath + "\\" + name);
                         image2.setCreatedDate(getTime());
                         imageRepository.save(image2);
                     }
                 }
                 return "success";
-            }
-            else
+            } else
                 return "fail to copy";
         } catch (Exception e) {
             return e.getMessage();
@@ -234,36 +234,35 @@ public class ImageController {
 
     //移动
     @RequestMapping("move")
-    public String move(@RequestParam(value = "path") String path,@RequestParam(value = "name")String name,@RequestParam(value = "newPath")String newPath) {
-        String cpath =getCpath(path);
+    public String move(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name, @RequestParam(value = "newPath") String newPath) {
+        String cpath = getCpath(path);
         try {
-            if(imageRepository.findByNameAndUrl(name,FilePath+"\\"+newPath)==null) {
+            if (imageRepository.findByNameAndUrl(name, FilePath + "\\" + newPath) == null) {
                 File srcFile = new File(FilePath + "\\" + path, name);
                 File destFile = new File(FilePath + "\\" + newPath, name);
                 if (srcFile.isFile()) {
                     FileUtils.moveFile(srcFile, destFile);
-                    Image image = imageRepository.findByNameAndUrl(name,cpath);
-                    image.setUrl(FilePath+"\\"+newPath);
+                    Image image = imageRepository.findByNameAndUrl(name, cpath);
+                    image.setUrl(FilePath + "\\" + newPath);
                     image.setCreatedDate(getTime());
                     imageRepository.save(image);
                 } else {
                     FileUtils.moveDirectory(srcFile, destFile);
-                    Image dir = imageRepository.findByNameAndUrl(name,cpath);
-                    dir.setUrl(FilePath+"\\"+newPath);
+                    Image dir = imageRepository.findByNameAndUrl(name, cpath);
+                    dir.setUrl(FilePath + "\\" + newPath);
                     dir.setCreatedDate(getTime());
                     imageRepository.save(dir);
 
-                    List<Image> list = imageRepository.findByUrl(cpath+"\\"+name);
-                    for (int i=0;i<list.size();i++){
+                    List<Image> list = imageRepository.findByUrl(cpath + "\\" + name);
+                    for (int i = 0; i < list.size(); i++) {
                         Image image = list.get(i);
-                        image.setUrl(FilePath+"\\"+newPath+"\\"+name);
+                        image.setUrl(FilePath + "\\" + newPath + "\\" + name);
                         image.setCreatedDate(getTime());
                         imageRepository.save(image);
                     }
                 }
                 return "success";
-            }
-            else {
+            } else {
                 return "fail to move";
             }
         } catch (Exception e) {
@@ -273,15 +272,14 @@ public class ImageController {
 
     //删除
     @RequestMapping("remove")
-    public Object remove(@RequestParam String path,@RequestParam(value = "name")String name) {
+    public Object remove(@RequestParam String path, @RequestParam(value = "name") String name) {
         try {
-            String cpath =getCpath(path);
+            String cpath = getCpath(path);
             File file = new File(cpath, name);
             if (file.isFile()) {
                 Image image = imageRepository.findByNameAndUrl(name, cpath);
                 imageRepository.delete(image);
-            }
-            else {
+            } else {
                 List<Image> list = imageRepository.findByUrl(cpath + "\\" + name);
                 for (int i = 0; i < list.size(); i++) {
                     Image image = list.get(i);
@@ -301,19 +299,19 @@ public class ImageController {
 
     //重命名
     @RequestMapping("rename")
-    public Object rename(@RequestParam(value = "path") String path,@RequestParam(value = "name")String name,@RequestParam(value = "newName")String newName) {
-        String cpath=getCpath(path);
+    public Object rename(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name, @RequestParam(value = "newName") String newName) {
+        String cpath = getCpath(path);
         try {
             File srcFile = new File(cpath, name);
             File destFile = new File(cpath, newName);
             if (srcFile.isFile()) {
-                Image image = imageRepository.findByNameAndUrl(name,cpath);
+                Image image = imageRepository.findByNameAndUrl(name, cpath);
                 image.setName(newName);
                 imageRepository.save(image);
                 FileUtils.moveFile(srcFile, destFile);
 
             } else {
-                Image dir = imageRepository.findByNameAndUrl(name,cpath);
+                Image dir = imageRepository.findByNameAndUrl(name, cpath);
                 dir.setName(newName);
                 imageRepository.save(dir);
 
@@ -335,141 +333,129 @@ public class ImageController {
     //图片操作
     //压缩图片
     @PostMapping(value = "/compress")
-    public String compress(@RequestParam(value = "path")String path,@RequestParam(value = "name")String name){
+    public String compress(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name) {
         String cpath = getCpath(path);
         try {
-            if(imageRepository.findByNameAndUrl("crop_" + name,cpath)==null) {
+            if (imageRepository.findByNameAndUrl("crop_" + name, cpath) == null) {
                 Thumbnails.of(cpath + "\\" + name).scale(1f).outputQuality(0.25f).toFile(cpath + "\\" + "crop_" + name);
-                File file = new File(cpath,"crop_" + name);
+                File file = new File(cpath, "crop_" + name);
                 saveImage(file);
                 return "success to compress";
-            }
-            else{
+            } else {
                 return "fail to compress for have one";
             }
-        }
-        catch (Exception e){
-            return  e.getMessage();
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 
     //缩放
     @PostMapping(value = "/zoomBySize")
-    public String zoomBySize(@RequestParam(value = "path")String path,@RequestParam(value = "name")String name,
-                             @RequestParam(value = "width") Integer width,@RequestParam(value = "hidth")Integer hidth){
+    public String zoomBySize(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name,
+                             @RequestParam(value = "width") Integer width, @RequestParam(value = "hidth") Integer hidth) {
 
-        String cpath =getCpath(path);
+        String cpath = getCpath(path);
         try {
-            if(imageRepository.findByNameAndUrl("zoom_"+width.toString()+"_"+hidth.toString() + name,cpath)==null) {
-                Thumbnails.of(cpath+"\\"+name).forceSize(width, hidth).toFile(
-                        cpath + "\\" + "zoom_"+width.toString()+"_"+hidth.toString() +"_"+ name);
-                File file = new File(cpath + "\\" + "zoom_"+width.toString()+"_"+hidth.toString() +"_"+ name);
+            if (imageRepository.findByNameAndUrl("zoom_" + width.toString() + "_" + hidth.toString() + name, cpath) == null) {
+                Thumbnails.of(cpath + "\\" + name).forceSize(width, hidth).toFile(
+                        cpath + "\\" + "zoom_" + width.toString() + "_" + hidth.toString() + "_" + name);
+                File file = new File(cpath + "\\" + "zoom_" + width.toString() + "_" + hidth.toString() + "_" + name);
                 saveImage(file);
                 return "success to zoom";
-            }
-            else{
+            } else {
                 return "fail to zoom for have one";
             }
-        }
-        catch (Exception e){
-            return  e.getMessage();
+        } catch (Exception e) {
+            return e.getMessage();
         }
 
     }
 
     @PostMapping(value = "/zoomByScale")
-    public String zoomByScale(@RequestParam(value = "path")String path,@RequestParam(value = "name")String name,
-                              @RequestParam(value = "scale") double scale){
+    public String zoomByScale(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name,
+                              @RequestParam(value = "scale") double scale) {
 
-        String cpath=getCpath(path);
+        String cpath = getCpath(path);
         try {
-            if(imageRepository.findByNameAndUrl("zoom_"+scale+"_" + name,cpath)==null) {
-                Thumbnails.of(cpath+"\\"+name).scale(scale).toFile(
-                        cpath + "\\" + "zoom_"+scale+"_"+ name);
-                File file = new File(cpath + "\\" + "zoom_"+scale+"_"+ name);
+            if (imageRepository.findByNameAndUrl("zoom_" + scale + "_" + name, cpath) == null) {
+                Thumbnails.of(cpath + "\\" + name).scale(scale).toFile(
+                        cpath + "\\" + "zoom_" + scale + "_" + name);
+                File file = new File(cpath + "\\" + "zoom_" + scale + "_" + name);
                 saveImage(file);
                 return "success to zoom";
-            }
-            else{
+            } else {
                 return "fail to zoom for have one";
             }
-        }
-        catch (Exception e){
-            return  e.getMessage();
+        } catch (Exception e) {
+            return e.getMessage();
         }
 
     }
 
     //旋转
     @PostMapping(value = "/rotate")
-    public String rotate(@RequestParam(value = "path")String path,@RequestParam(value = "name")String name,
+    public String rotate(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name,
                          @RequestParam(value = "degrees") double degrees) {
 
-        String cpath =getCpath(path);
+        String cpath = getCpath(path);
         try {
-            if(imageRepository.findByNameAndUrl("rotate_"+degrees+"_" + name,cpath)==null) {
-                Thumbnails.of(cpath+"\\"+name).scale(1).rotate(degrees).toFile(
-                        cpath + "\\" + "rotate_"+degrees+"_"+ name);
-                File file = new File(cpath + "\\" + "rotate_"+degrees+"_"+ name);
+            if (imageRepository.findByNameAndUrl("rotate_" + degrees + "_" + name, cpath) == null) {
+                Thumbnails.of(cpath + "\\" + name).scale(1).rotate(degrees).toFile(
+                        cpath + "\\" + "rotate_" + degrees + "_" + name);
+                File file = new File(cpath + "\\" + "rotate_" + degrees + "_" + name);
                 saveImage(file);
                 return "success to rotate";
-            }
-            else{
+            } else {
                 return "fail to zoom for have one";
             }
-        }
-        catch (Exception e){
-            return  e.getMessage();
+        } catch (Exception e) {
+            return e.getMessage();
         }
 
     }
 
     //裁剪
     @PostMapping(value = "/crop")
-    public String crop(@RequestParam(value = "path")String path,@RequestParam(value = "name")String name,
-                       @RequestParam(value = "x") Integer x,@RequestParam(value = "y")Integer y,
-                       @RequestParam(value = "width") Integer width,@RequestParam(value = "hidth")Integer hidth){
+    public String crop(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name,
+                       @RequestParam(value = "x") Integer x, @RequestParam(value = "y") Integer y,
+                       @RequestParam(value = "width") Integer width, @RequestParam(value = "hidth") Integer hidth) {
 
-        String cpath =getCpath(path);
+        String cpath = getCpath(path);
         try {
-            if(imageRepository.findByNameAndUrl("crop_"+x.toString()+"_"+y.toString()+"_"+width.toString()+"_"+hidth.toString()+"_" + name,cpath)==null) {
-                Thumbnails.of(cpath+"\\"+name).sourceRegion(x,y,width,hidth).size(width,hidth).keepAspectRatio(false).toFile(
-                        cpath + "\\"+"crop_"+x.toString()+"_"+y.toString()+"_"+width.toString()+"_"+hidth.toString()+"_" +name);
-                File file = new File(cpath , "crop_"+x.toString()+"_"+y.toString()+"_"+width.toString()+"_"+hidth.toString()+"_" + name);
+            if (imageRepository.findByNameAndUrl("crop_" + x.toString() + "_" + y.toString() + "_" + width.toString() + "_" + hidth.toString() + "_" + name, cpath) == null) {
+                Thumbnails.of(cpath + "\\" + name).sourceRegion(x, y, width, hidth).size(width, hidth).keepAspectRatio(false).toFile(
+                        cpath + "\\" + "crop_" + x.toString() + "_" + y.toString() + "_" + width.toString() + "_" + hidth.toString() + "_" + name);
+                File file = new File(cpath, "crop_" + x.toString() + "_" + y.toString() + "_" + width.toString() + "_" + hidth.toString() + "_" + name);
                 saveImage(file);
                 return "success to crop";
-            }
-            else{
+            } else {
                 return "fail to zoom for have one";
             }
-        }
-        catch (Exception e){
-            return  e.getMessage();
+        } catch (Exception e) {
+            return e.getMessage();
         }
 
     }
 
     //水印
     @PostMapping(value = "/waterMark")
-    public String waterMark(@RequestParam(value = "path")String path,@RequestParam(value = "name")String name) {
+    public String waterMark(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name) {
 
         String cpath = getCpath(path);
         try {
-            if(imageRepository.findByNameAndUrl("waterMark"+"_" + name,cpath)==null) {
+            if (imageRepository.findByNameAndUrl("waterMark" + "_" + name, cpath) == null) {
 
 
-                Thumbnails.of(cpath+"\\"+name).scale(1f).watermark(Positions.TOP_LEFT, ImageIO.read(new File(System.getProperty("user.dir")+"\\src\\main\\resources\\static\\image\\shuiyin.jpg")),1f)
-                        .toFile(cpath + "\\" + "waterMark"+"_"+ name);
-                File file = new File(cpath + "\\" + "waterMark"+"_"+ name);
+                Thumbnails.of(cpath + "\\" + name).scale(1f).watermark(Positions.TOP_LEFT, ImageIO.read(new File(System.getProperty("user.dir") + "\\src\\main\\resources\\static\\image\\shuiyin.jpg")), 1f)
+                        .toFile(cpath + "\\" + "waterMark" + "_" + name);
+                File file = new File(cpath + "\\" + "waterMark" + "_" + name);
                 saveImage(file);
                 return "success to waterMark";
-            }
-            else{
+            } else {
                 return "fail to zoom for have one";
             }
-        }
-        catch (Exception e){
-            return  e.getMessage();
+        } catch (Exception e) {
+            return e.getMessage();
         }
 
     }
@@ -477,46 +463,45 @@ public class ImageController {
     //滤镜处理
     //黑白滤镜
     @PostMapping(value = "/grayFilter")
-    public void gray(@RequestParam(value = "path")String path,@RequestParam(value = "name")String name) throws IOException {
+    public void gray(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name) throws IOException {
 
-        String cpath=getCpath(path);
+        String cpath = getCpath(path);
         // 定义过滤器
         GrayscaleFilter filter = new GrayscaleFilter();
 
 
-
-        BufferedImage fromImage = ImageIO.read(new File(cpath,name));
+        BufferedImage fromImage = ImageIO.read(new File(cpath, name));
         int width = fromImage.getWidth();
         int height = fromImage.getHeight();
         BufferedImage toImage = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_RGB);
-        filter.filter(fromImage,toImage);
+        filter.filter(fromImage, toImage);
 
-        ImageIO.write(toImage, "jpg", new File(cpath,"grayF_"+name));
-        File file = new File(cpath,"grayF_"+name);
+        ImageIO.write(toImage, "jpg", new File(cpath, "grayF_" + name));
+        File file = new File(cpath, "grayF_" + name);
         saveImage(file);
     }
 
-    private String getCpath(String path){
+    private String getCpath(String path) {
         String cpath;
         //判断path是否为空
         if (path == null || path.length() == 0) {
-            cpath = FilePath ;
+            cpath = FilePath;
         } else {
-            cpath = FilePath + "\\" + path ;
+            cpath = FilePath + "\\" + path;
         }
         return cpath;
     }
 
-    private String getTime(){
+    private String getTime() {
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss");
         String time = dateFormat.format(date);
         return time;
     }
 
-    private void saveImage(File file){
-        Image image= new Image();
+    private void saveImage(File file) {
+        Image image = new Image();
         image.setUrl(file.getParent());
         image.setName(file.getName());
         image.setType("img");

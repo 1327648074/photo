@@ -1,5 +1,7 @@
 package com.ipa.demo.dao;
+
 import java.util.Date;
+
 import com.ipa.demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

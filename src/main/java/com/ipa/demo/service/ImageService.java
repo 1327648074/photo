@@ -20,18 +20,16 @@ public class ImageService {
     private ImageRepository imageRepository;
 
 
-
-    public String upload(MultipartFile file,String cpath){
+    public String upload(MultipartFile file, String cpath) {
 
 
         // 获取文件路径
         String fileName = file.getOriginalFilename();
 
-        if(imageRepository.findByNameAndUrl(fileName,cpath)==null) {
+        if (imageRepository.findByNameAndUrl(fileName, cpath) == null) {
 
 
-
-            File dest = new File(cpath+"\\"+fileName);
+            File dest = new File(cpath + "\\" + fileName);
 
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss");
@@ -59,17 +57,17 @@ public class ImageService {
     }
 
     //文件下载相关代码
-    public void downloadImage(String cpath,String name,HttpServletResponse response) throws IOException{
+    public void downloadImage(String cpath, String name, HttpServletResponse response) throws IOException {
 //        String imageName = "\\image8b3e8015-e2ba-4e6d-8da8-bc37478be199.jpg";
 //      //  filePath.debug("the imageName is : "+imageName);
 //        Image image = imageRepository.findByName(imageName);
 //        String fileUrl = filePath + imageName;
-        File file = new File(cpath ,name);
+        File file = new File(cpath, name);
 
 //        File file = new File(fileUrl);
         if (file.exists()) {
             response.setContentType("application/force-download");
-           response.addHeader("Content-Disposition","attachment;fileName=" + name);
+            response.addHeader("Content-Disposition", "attachment;fileName=" + name);
 //                response.setHeader("Context-Type", "application/xmsdownload");
             byte[] buffer = new byte[1024];
             FileInputStream fis = null;
@@ -108,7 +106,6 @@ public class ImageService {
 
 
     }
-
 
 
 }

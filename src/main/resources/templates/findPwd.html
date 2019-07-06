@@ -6,50 +6,59 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <script src="/jquery-3.4.1.min.js"></script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             $("#forget_frame").slideToggle("slow");
 
-$("#a").ready(b());
-            function b(){
-             $("#a").fadeIn("slow");
-             abc();
-              }
-            function abc(){
-            var a=$("#a");
-            a.animate({left:'400px',opacity:'0.2'},3200);
-            a.animate({left:'10px',opacity:'0.8'},3200,abc);
-            }
-         $("#b").ready(c());
-        function c(){
-      $("#b").fadeIn("slow");
-        d();
-         }
-         function d(){
-         var b=$("#b");
-         b.animate({right:'200px',opacity:'0'},5000);
-         b.animate({right:'10px',opacity:'0.5'},3000,c);}
-        
+            $("#a").ready(b());
 
-     
-$("#c").ready(e());
-        function e(){
-         $("#c").fadeIn("slow");
-        f();
-         }
-         function f(){
-         var c=$("#c");
-         c.animate({opacity:'0'},5000);
-         c.animate({opacity:'0.7'},3000,f);}
+            function b() {
+                $("#a").fadeIn("slow");
+                abc();
+            }
+
+            function abc() {
+                var a = $("#a");
+                a.animate({left: '400px', opacity: '0.2'}, 3200);
+                a.animate({left: '10px', opacity: '0.8'}, 3200, abc);
+            }
+
+            $("#b").ready(c());
+
+            function c() {
+                $("#b").fadeIn("slow");
+                d();
+            }
+
+            function d() {
+                var b = $("#b");
+                b.animate({right: '200px', opacity: '0'}, 5000);
+                b.animate({right: '10px', opacity: '0.5'}, 3000, c);
+            }
+
+
+            $("#c").ready(e());
+
+            function e() {
+                $("#c").fadeIn("slow");
+                f();
+            }
+
+            function f() {
+                var c = $("#c");
+                c.animate({opacity: '0'}, 5000);
+                c.animate({opacity: '0.7'}, 3000, f);
+            }
 
 
         });
     </script>
     <style>
-        body{
+        body {
             background-image: url("/timg.jpg");
-            background-repeat:no-repeat ;
-            background-size:100% 100%;
-            background-attachment: fixed;"
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-attachment: fixed;
+        "
         }
 
         input[type=email] {
@@ -104,59 +113,62 @@ $("#c").ready(e());
             background-color: #45a049;
         }
 
-        #forget_frame{
-            margin:10px 480px 50px 450px;
+        #forget_frame {
+            margin: 10px 480px 50px 450px;
             border-style: none;
-            background:linear-gradient(to right, rgba(255,255,255,0.01) , rgba(209,250,250,0.9),rgba(255,255,255,0.01));
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.01), rgba(209, 250, 250, 0.9), rgba(255, 255, 255, 0.01));
             padding: 50px 150px;
             display: none;
-            opacity:0.9;
-            z-index:10;
+            opacity: 0.9;
+            z-index: 10;
         }
 
-#a{
-        position:absolute;
-        left:10px;
-        top:320px;
-         background-image:url("/云.png");
-         height:300px;
-         width:550px;
-          position:absolute;
-         display:none;
-         z-index:-5;
+        #a {
+            position: absolute;
+            left: 10px;
+            top: 320px;
+            background-image: url("/云.png");
+            height: 300px;
+            width: 550px;
+            position: absolute;
+            display: none;
+            z-index: -5;
         }
 
-        #b{
-        position:absolute;
-        right:10px;
-        top:400px;
-         background-image:url("/深色云.png");
-         height:240px;
-         width:505px;
-          position:absolute;
-          display:none;
-          opacity:0.8
+        #b {
+            position: absolute;
+            right: 10px;
+            top: 400px;
+            background-image: url("/深色云.png");
+            height: 240px;
+            width: 505px;
+            position: absolute;
+            display: none;
+            opacity: 0.8
         }
-         #c{
-        position:absolute;
-        top:0;
-        left:30px;
-         background-image:url("/光点.png");
-         height:220px;
-             width:95%;
-          position:absolute;
-          display:none;
-          opacity:0.7
+
+        #c {
+            position: absolute;
+            top: 0;
+            left: 30px;
+            background-image: url("/光点.png");
+            height: 220px;
+            width: 95%;
+            position: absolute;
+            display: none;
+            opacity: 0.7
         }
-       #logo
-       {text-align:center}
+
+        #logo {
+            text-align: center
+        }
     </style>
 </head>
 <body>
 <div id="logo">
-<img src="/卿相.png" style="zoom:0.3"></div>
-<div id="a" ></div>
-<div id="b" ></div>
+    <img src="/卿相.png" style="zoom:0.3"></div>
+<div id="a"></div>
+<div id="b"></div>
 <div id="c"></div>
 <div id="forget_frame">
     <form method="post" target="_blank" name="findFrame">
@@ -169,59 +181,60 @@ $("#c").ready(e());
 </div>
 <script>
     jQuery(document).ready(function () {
-        $("#btn_vcode").on("click",function () {
+        $("#btn_vcode").on("click", function () {
 
-            var username=$("#email").val();
-            if(username==""){
+            var username = $("#email").val();
+            if (username == "") {
                 alert("邮箱不能为空");
             }
             $.ajax({
-                type:"POST",
+                type: "POST",
                 // dataType:"text",
                 // contentType:"application/json;charset=UTF-8",
-                url:"/front/sendFindCode",
-                data:{
-                    username:username
+                url: "/front/sendFindCode",
+                data: {
+                    username: username
                 },
-                success:function () {
-                    $("#btn_vcode").attr('disabled','disabled');
-                    var count=1;
-                    var sum=60;
-                    var i=setInterval(function () {
-                        if(count>60){
-                            $("#btn_vcode").attr('disabled',false);
+                success: function () {
+                    $("#btn_vcode").attr('disabled', 'disabled');
+                    var count = 1;
+                    var sum = 60;
+                    var i = setInterval(function () {
+                        if (count > 60) {
+                            $("#btn_vcode").attr('disabled', false);
                             $("#btn_vcode").val("获取验证码");
                             clearInterval(i)
-                        }else{
-                            $("#btn_vcode").val("剩余"+parseInt(sum-count)+'秒');
-                        }count++;
-                    },1000)
+                        } else {
+                            $("#btn_vcode").val("剩余" + parseInt(sum - count) + '秒');
+                        }
+                        count++;
+                    }, 1000)
                 },
-                error:function () {
+                error: function () {
                     alert("发送失败");
                 }
             })
         })
-        $("#btn_next").on("click",function () {
-            var username=$("#email").val();
-            var verCode=$("#verify").val();
-            var person={
-                username:username,
-                verCode:verCode
+        $("#btn_next").on("click", function () {
+            var username = $("#email").val();
+            var verCode = $("#verify").val();
+            var person = {
+                username: username,
+                verCode: verCode
             };
             $.ajax({
-                type:"POST",
-                contentType:"application/json;charset=UTF-8",
-                url:"/front/verifyFindCode",
-                data:JSON.stringify(person),
-                success:function (data) {
-                    if(data=="success"){
-                        window.location.href="/front/reset";
-                    }else{
+                type: "POST",
+                contentType: "application/json;charset=UTF-8",
+                url: "/front/verifyFindCode",
+                data: JSON.stringify(person),
+                success: function (data) {
+                    if (data == "success") {
+                        window.location.href = "/front/reset";
+                    } else {
                         alert("验证失败");
                     }
                 },
-                error:function () {
+                error: function () {
                     alert("请求失败");
                 }
             })
