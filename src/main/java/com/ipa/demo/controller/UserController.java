@@ -130,4 +130,10 @@ public class UserController {
     public String showPhotos(){
         return "showPhotos";
     }
+
+    //主页
+    @RequestMapping("/welcome")
+    public String welcome(){
+        return "welcome";
+    }
 }

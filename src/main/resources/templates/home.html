@@ -144,14 +144,11 @@
             display: none;
         }
 
-
         .accordion li a, .accordion li a:visited {
             /*菜单链接样式*/
             color: #FFFFFF;
             text-decoration: none
         }
-
-
     </style>
 </head>
 <body>
@@ -186,7 +183,7 @@
 <div id="topline">
 </div>
 <div style="height:100%;">
-    <iframe name="myframe" src="3dphotos.html" frameborder="0" style="height: 100%;
+    <iframe name="myframe" src="/front/welcome" frameborder="0" style="height: 100%;
        width: 100%;position: absolute;top:60px;left:220px;transform-origin:0 0;transform:scale(0.85,0.9);"></iframe>
 </div>
 <script type="text/javascript">
@@ -205,7 +202,6 @@
     });
     $(function () {
         $("ul.accordion li span").on('click', function () {
-
             $(this).parent().siblings().removeClass('selected');
             /*$(this).parent().addClass('selected');*/
             $(this).next().slideToggle(500);

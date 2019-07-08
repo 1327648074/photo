@@ -115,7 +115,8 @@
                 url: "/front/doChangePwd",
                 data: JSON.stringify(pwds),
                 success: function (data) {
-                    alert("修改成功");
+                    alert("修改成功,请重新登录");
+                    window.location.href="/front/login";
                 },
                 error: function (data) {
                     alert("修改失败");

@@ -1,7 +1,6 @@
 package com.ipa.demo.service;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,7 +34,7 @@ public class AnalyzeService {
                             labelProbabilities[bestLabelIdx] * 100f));
             String things = labels.get(bestLabelIdx);
             things = things.substring(2, things.length());
-            if (labelProbabilities[bestLabelIdx] >= 0.6) {
+            if (labelProbabilities[bestLabelIdx] >= 0.7) {
                 return things;
             } else {
                 return "其他";

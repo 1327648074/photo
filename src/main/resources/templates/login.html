@@ -243,7 +243,22 @@
                     if (data == "success") {
                         sessionStorage.setItem("username", username);
                         window.location.href = "/front/home";
-                    } else {
+                        $.ajax({
+                            type:"POST",
+                            url:"/image/login",
+                            data:{
+                                user:username
+                            },
+                            success: function (data) {
+                                    alert("欢迎"+username);
+                            },
+                            error: function () {
+                                    alert("111");
+                                }
+                             })
+
+                    }
+                    else {
                         alert("登陆失败");
                     }
                 },

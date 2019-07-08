@@ -1,0 +1,107 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <script src="/jquery-3.4.1.min.js"></script>
+    <title></title>
+    <style>
+        body {
+            background: rgba(181, 236, 238, 0.2);
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        #welcome {
+            text-align: center;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            top: 250px;
+        }
+
+        #welcome p {
+            font-size: 60px;
+        }
+
+        #n1, #n2 {
+            color: #FFFFFF;
+            /*-webkit-text-stroke: 1px #4c4c4c;*/
+            text-shadow: 3px 3px 3px #6f6f6f;
+        }
+
+        #n1, #n2, #n3, #n4, #n5, #n6, #n7, #n8, #n9 {
+            display: none;
+        }
+
+        #n3, #n4 {
+            color: #ffffff;
+            text-shadow: -3px -3px 4px #ff0000, 3px 3px 4px #ff0000, -3px 3px 4px #ff0000, 3px -3px 4px #ff0000;
+        }
+
+        #n5 {
+            background-image: -webkit-linear-gradient(bottom, #8EE0EE, #fd8403, red);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #n6 {
+            background-image: -webkit-linear-gradient(top, #8EE0EE, #fd8403, #fd8403, red);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #n7 {
+            background-image: -webkit-linear-gradient(left, red, #ff9900, yellow, green, #00fff7, blue, purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #n8 {
+            background-image: -webkit-linear-gradient(left, #ff9900, yellow, #00fff7, purple, blue, red, yellow, #ff9900, red);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #n9 {
+            transform: translateY(-30%);
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+                $("#n1").fadeIn(500);
+                $("#n1").delay(1000).fadeOut(500);
+                $("#n2").delay(2000).fadeIn(500);
+                $("#n2").delay(1000).fadeOut(500);
+                $("#n3").delay(4000).slideDown(500);
+                $("#n3").delay(1000).slideUp(500);
+                $("#n4").delay(6000).slideDown(500);
+                $("#n4").delay(1000).fadeOut(1000);
+                $("#n5").delay(8500).fadeIn(500);
+                $("#n5").delay(1000).fadeOut(500);
+                $("#n6").delay(10500).fadeIn(500);
+                $("#n6").delay(1000).slideUp(500);
+                $("#n7").delay(12500).slideDown(500);
+                $("#n7").delay(1000).fadeOut(500);
+                $("#n8").delay(14500).fadeIn(1000);
+                $("#n8").delay(1000).fadeOut(1000);
+                $("#n9").delay(17500).fadeIn(1000);
+            }
+        );
+    </script>
+<body>
+<div id="welcome">
+    <p id="n1">感觉生活空无一物？</p>
+    <p id="n2">每天千篇一律？</p>
+    <p id="n3">然而</p>
+    <p id="n4">你的世界本并非没有光彩</p>
+    <p id="n5">只不过你忘记了那些美丽的瞬间</p>
+    <p id="n6">从今天起</p>
+    <p id="n7">遇见卿相</p>
+    <p id="n8">遇见 你的美好</p>
+    <img id="n9" src="/卿相改.png">
+</div>
+</body>
+</html>

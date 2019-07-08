@@ -175,12 +175,49 @@
                         contentType: "application/json;charset=UTF-8",
                         data:JSON.stringify(path),
                         success:function (data) {
-                            var r=confirm("你的图片为："+data+"!是否放入推荐相册中？");
-                            // if(r){
-                            //     alert("收到");
-                            // }else {
-                            //     alert("请");
-                            // }
+                            var r=confirm("你的图片"+data.name+"为："+data.folder+"!是否放入推荐相册中？");
+                            var name = data.name;
+                            var folder = data.folder;
+                            if(r){
+                                $.ajax({
+                                    type:"POST",
+                                    url:"/image/createFolder",
+                                    data:{
+                                        folderName:data.folder
+                                    },
+                                    success:function (data) {
+                                        alert(data);
+                                        var username=sessionStorage.getItem("username");
+                                        $.ajax({
+                                            type:"POST",
+                                            url:"/image/move",
+                                            data:{
+                                                path:null,
+                                                newPath : folder,
+                                                name: name
+                                            },
+                                            success:function (data) {
+
+                                            },
+                                            error:function () {
+                                                alert("失败");
+                                            }
+                                        })
+
+                                        $("#btn_changeIfo").on("click",function () {
+                                            window.location.href="/front/changeInfo";
+                                        })
+                                    },
+                                    error:function () {
+                                        alert("请求失败");
+                                    }
+                                })
+                                $("#btn_changeIfo").on("click",function () {
+                                    window.location.href="/front/changeInfo";
+                                })
+                            }else {
+                                alert("请");
+                            }
                         },
                         error:function () {
                             alert("分析失败");

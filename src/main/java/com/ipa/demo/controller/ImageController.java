@@ -46,12 +46,12 @@ public class ImageController {
 
     //登入登出操作
     @RequestMapping(value = "/login")
-    public void Login(@RequestParam(value = "user") String user) {
-
-        createFolder(user, null);
+    public String Login(@RequestParam(value = "user") String user) {
+        createFolder(user);
         FilePath = ROOT + "\\" + user;
         USER = user;
         VISIT = user;
+        return "success";
     }
 
     @RequestMapping(value = "/visit")
@@ -126,12 +126,12 @@ public class ImageController {
 
     //查看目录下的文件和图片
     @RequestMapping("/list")
-    public Object list(/*@RequestBody JSONObject json*/@RequestParam(value = "path") String path) throws ServletException {
+    public Object list(/*@RequestBody JSONObject json*//*@RequestParam(value = "path") String path*/) throws ServletException {
         try {
-
+            String cpath = FilePath;
             // 返回的结果集
             List<JSONObject> fileItems = new ArrayList<>();
-            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(FilePath, path))) {
+            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(cpath))) {
                 for (Path pathObj : directoryStream) {
                     // 获取文件基本属性
                     BasicFileAttributes attrs = Files.readAttributes(pathObj, BasicFileAttributes.class);
@@ -139,6 +139,7 @@ public class ImageController {
                     JSONObject fileItem = new JSONObject();
                     fileItem.put("name", pathObj.getFileName().toString());
                     fileItem.put("date", getTime());
+                    fileItem.put("path",cpath);
                     fileItem.put("size", attrs.size());
                     fileItem.put("type", attrs.isDirectory() ? "dir" : "img");
                     fileItems.add(fileItem);
@@ -166,21 +167,23 @@ public class ImageController {
     //图片管理
     //创建新文件夹
     @RequestMapping("/createFolder")
-    public String createFolder(@RequestParam String folderName, @RequestParam(value = "path") String path) {
+    public String createFolder(@RequestParam String folderName) {
         try {
-            String cpath = getCpath(path);
-            File newDir = new File(cpath + "\\" + folderName);
-            if (!newDir.mkdir()) {
-                throw new Exception("不能创建目录: " + folderName);
-            }
-            Image image = new Image();
-            image.setUrl(cpath);
-            image.setName(folderName);
-            image.setType("dir");
-            image.setCreatedDate(getTime());
-            imageRepository.save(image);
 
-            return "success";
+            File newDir = new File(FilePath+"\\" + folderName);
+            if (!newDir.mkdir()) {
+
+            }
+            else {
+                Image image = new Image();
+                image.setUrl(FilePath + "\\" + folderName);
+                image.setName(folderName);
+                image.setType("dir");
+                image.setCreatedDate(getTime());
+                imageRepository.save(image);
+            }
+
+            return folderName;
         } catch (Exception e) {
             return e.getMessage();
         }
