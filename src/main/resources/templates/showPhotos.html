@@ -1,0 +1,148 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <script src="/jquery-3.4.1.min.js"></script>
+    <title>3D相册</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background: rgba(181, 236, 238, 0.2);
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #s {
+            perspective: 4000px;
+        }
+
+        #photos {
+            width: 320px;
+            height: 380px;
+            margin: 120px auto;
+            transform-style: preserve-3d; /*设置3d环境*/
+            transform-origin: 50% 50%;
+
+        }
+
+        #photos img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            box-shadow: 1px -1px 6px #666;
+            border-radius: 4px;
+            -webkit-box-reflect: below 3px -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.5));
+            cursor: pointer;
+            backface-visibility: hidden;
+
+        }
+
+        #photos div {
+            width: 1200px;
+            height: 1200px;
+            border-radius: 50%;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -600px;
+            margin-top: -600px;
+            transform: rotateX(90deg);
+            background: -webkit-radial-gradient(center, 600px 600px, rgba(158, 158, 222, 0.5), rgba(0, 0, 0, 0));
+        }
+
+
+        #x {
+            position: absolute;
+            float: left;
+            left: 200px;
+            top: 200px;
+        }
+
+        #y {
+            float: right;
+            position: absolute;
+            right: 200px;
+            top: 200px;
+        }
+
+
+    </style>
+
+    <script>
+        window.onload = function () {
+            var photosDom = document.getElementById('photos');
+            var images = photosDom.getElementsByTagName('img');
+            var len = images.length;
+            var d = Math.floor(360 / len);
+            for (var i = 0; i < len; i++) {
+                images[i].style = 'transform : rotateY(' + d * i + 'deg) translateZ(400px)';
+            }
+            var x = 0;
+            /*setInterval(function(){
+            photosDom.style.transform = "rotateX(-0deg) rotateY("+ (x++) * 0.3 +"deg)";
+            },30);*/
+        }
+    </script>
+    <script>
+        var i = 0;
+        var x = 0;
+        var n1 = 1;
+        var n2 = 1;
+
+        function c() {
+            var photosDom = document.getElementById('photos');
+            var l = window.setInterval(function () {
+                if (n1 >= 150) {
+                    clearInterval(l);
+                    n1 = 0;
+                }
+                x++;
+                photosDom.style.transform = "rotateX(-0deg) rotateY(+" + x * 0.4 + "deg)";
+                n1++;
+            }, 5);
+            /*setTimeout(function(){clearInterval(l)});*/
+        }
+
+        function d() {
+            var photosDom = document.getElementById('photos');
+            var i = window.setInterval(function () {
+                if (n2 >= 150) {
+                    clearInterval(i);
+                    n2 = 0;
+                }
+                x--;
+                photosDom.style.transform = "rotateX(-0deg) rotateY(" + x * 0.4 + "deg)";
+                n2++;
+            }, 5);
+            /*setTimeout(function(){clearInterval(l)});*/
+        }
+
+    </script>
+</head>
+<body>
+<div id="s">
+    <div id="photos">
+        <img src="file:\\D:\Flash作业\图8.jpg"/>
+        <img src="timg1.jpg"/>
+        <img src="timg2.jpg"/>
+        <img src="timg3.jpg"/>
+        <img src="timg4.jpg"/>
+        <img src="timg5.jpg"/>
+        <div></div>
+    </div>
+</div>
+<div id="x">
+    <img src="左移按钮.png" style="opacity:0.8;" onclick="d()">
+</div>
+<div id="y">
+    <img src="右移按钮.png" style="opacity:0.8;" onclick="c()">
+</div>
+</body>
+
+</html>

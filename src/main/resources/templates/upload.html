@@ -176,11 +176,11 @@
                         data:JSON.stringify(path),
                         success:function (data) {
                             var r=confirm("你的图片为："+data+"!是否放入推荐相册中？");
-                            if(r){
-                                alert("收到");
-                            }else {
-                                alert("请");
-                            }
+                            // if(r){
+                            //     alert("收到");
+                            // }else {
+                            //     alert("请");
+                            // }
                         },
                         error:function () {
                             alert("分析失败");

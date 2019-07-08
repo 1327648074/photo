@@ -119,4 +119,15 @@ public class UserController {
         }
     }
 
+    //我的相册界面
+    @RequestMapping("/myAlbum")
+    public String myAlbum(){
+        return "myAlbum";
+    }
+
+    //展示图片界面
+    @RequestMapping("/showPhotos")
+    public String showPhotos(){
+        return "showPhotos";
+    }
 }
