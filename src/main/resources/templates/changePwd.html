@@ -89,6 +89,9 @@
 </body>
 <script>
     jQuery(document).ready(function () {
+        if(sessionStorage.getItem("username")==null){
+            window.location.href="/front/login";
+        }
         $("#btn_change").on("click", function () {
             var username = sessionStorage.getItem("username");
             var oldPwd = $("#orgpwd").val();
@@ -116,7 +119,7 @@
                 data: JSON.stringify(pwds),
                 success: function (data) {
                     alert("修改成功,请重新登录");
-                    window.location.href="/front/login";
+                    // window.location.href="/front/login";
                 },
                 error: function (data) {
                     alert("修改失败");

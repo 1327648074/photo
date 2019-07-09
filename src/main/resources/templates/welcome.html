@@ -104,4 +104,11 @@
     <img id="n9" src="/卿相改.png">
 </div>
 </body>
+<script>
+    jQuery(document).ready(function () {
+        if(sessionStorage.getItem("username")==null){
+            window.location.href="/front/login";
+        }
+    })
+</script>
 </html>

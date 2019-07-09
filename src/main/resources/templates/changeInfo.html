@@ -97,6 +97,10 @@
 </body>
 <script>
     jQuery(document).ready(function () {
+        if(sessionStorage.getItem("username")==null){
+            window.location.href="/front/login";
+        }
+        // alert(sessionStorage.getItem("username"));
         $("#btn_return").on("click",function () {
             window.location.href="/front/info";
         })

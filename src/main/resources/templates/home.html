@@ -160,6 +160,9 @@
         <p id="btn">◀</p>
         <ul class="accordion">
             <li>
+                <span><a href="/front/welcome" target="myframe">回到主页</a></span>
+            </li>
+            <li>
                 <span><a href="/front/myAlbum" target="myframe">我的相册</a></span>
             </li>
             <li>
@@ -207,6 +210,16 @@
             $(this).next().slideToggle(500);
         });
     });
+</script>
+<script>
+    jQuery(document).ready(function () {
+        if(sessionStorage.getItem("username")==null){
+            window.location.href="/front/login";
+        }
+        $("#return").on("click",function () {
+            sessionStorage.setItem("username",null);
+        })
+    })
 </script>
 </body>
 </html>

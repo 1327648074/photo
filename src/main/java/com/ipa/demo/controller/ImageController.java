@@ -47,6 +47,7 @@ public class ImageController {
     //登入登出操作
     @RequestMapping(value = "/login")
     public String Login(@RequestParam(value = "user") String user) {
+        FilePath = ROOT;
         createFolder(user);
         FilePath = ROOT + "\\" + user;
         USER = user;
@@ -61,9 +62,9 @@ public class ImageController {
         VISIT = user;
     }
 
-    @RequestMapping(value = "/Logout")
-    public void Logout(@RequestParam(value = "user") String user) {
-        FilePath = FilePath.replace("\\" + user, "");
+    @RequestMapping(value = "/logout")
+    public void Logout() {
+        FilePath = ROOT;
         USER = "";
     }
 
@@ -169,20 +170,19 @@ public class ImageController {
     @RequestMapping("/createFolder")
     public String createFolder(@RequestParam String folderName) {
         try {
-
+//            String path = "792989118@qq.com";
             File newDir = new File(FilePath+"\\" + folderName);
             if (!newDir.mkdir()) {
 
             }
             else {
                 Image image = new Image();
-                image.setUrl(FilePath + "\\" + folderName);
+                image.setUrl(FilePath);
                 image.setName(folderName);
                 image.setType("dir");
                 image.setCreatedDate(getTime());
                 imageRepository.save(image);
             }
-
             return folderName;
         } catch (Exception e) {
             return e.getMessage();
@@ -303,7 +303,7 @@ public class ImageController {
     }
 
     //重命名
-    @RequestMapping("rename")
+    @RequestMapping("/rename")
     public Object rename(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name, @RequestParam(value = "newName") String newName) {
         String cpath = getCpath(path);
         try {

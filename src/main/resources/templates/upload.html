@@ -66,6 +66,7 @@
                 //ie7,8使用滤镜本地预览
                 else if ($.browser.version == 7 || $.browser.version == 8) {
                     $("#browsefile").change(function (event) {
+
                         $(event.target).select();
                         var src = document.selection.createRange().text;
                         var dom = document.getElementById('images_show');
@@ -187,7 +188,6 @@
                                     },
                                     success:function (data) {
                                         alert(data);
-                                        var username=sessionStorage.getItem("username");
                                         $.ajax({
                                             type:"POST",
                                             url:"/image/move",
@@ -203,20 +203,40 @@
                                                 alert("失败");
                                             }
                                         })
+                                    },
+                                    error:function () {
+                                        alert("请求失败");
+                                    }
+                                })
+                            }else {
+                                $.ajax({
+                                    type:"POST",
+                                    url:"/image/createFolder",
+                                    data:{
+                                        folderName:"其他"
+                                    },
+                                    success:function (data) {
+                                        alert(data);
+                                        $.ajax({
+                                            type:"POST",
+                                            url:"/image/move",
+                                            data:{
+                                                path:null,
+                                                newPath : "其他",
+                                                name: name
+                                            },
+                                            success:function (data) {
 
-                                        $("#btn_changeIfo").on("click",function () {
-                                            window.location.href="/front/changeInfo";
+                                            },
+                                            error:function () {
+                                                alert("失败");
+                                            }
                                         })
                                     },
                                     error:function () {
                                         alert("请求失败");
                                     }
                                 })
-                                $("#btn_changeIfo").on("click",function () {
-                                    window.location.href="/front/changeInfo";
-                                })
-                            }else {
-                                alert("请");
                             }
                         },
                         error:function () {

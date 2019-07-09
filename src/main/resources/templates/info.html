@@ -69,6 +69,9 @@
 </body>
 <script>
     jQuery(document).ready(function () {
+        if(sessionStorage.getItem("username")==null){
+            window.location.href="/front/login";
+        }
         var username=sessionStorage.getItem("username");
         $.ajax({
             type:"POST",

@@ -181,6 +181,9 @@
 </div>
 <script>
     jQuery(document).ready(function () {
+        if(sessionStorage.getItem("username")==null){
+            window.location.href="/front/login";
+        }
         $("#btn_vcode").on("click", function () {
 
             var username = $("#email").val();
