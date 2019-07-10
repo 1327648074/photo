@@ -4,7 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>jQuery文件夹管理插件DEMO演示</title>
     <link rel="shortcut icon" href="/favicon.ico">
-
     <script type="text/javascript" src="/jquery-1.8.8.js"></script>
     <script type="text/javascript">
 
@@ -100,7 +99,7 @@
                                 name:b
                             },
                             success:function (data) {
-                                window.location.href = "/front/album";
+                                window.location.href = "/front/userPhotos";
                             },
                             error:function () {
                                 alert("请求失败");
@@ -149,7 +148,7 @@
                         $('#321').find('.changename').css('border','1px solid #FF0000')
                     }else
                     {
-                        alert('请选择相册1')
+                        alert('请选择相册')
                     }
 
                 });

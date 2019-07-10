@@ -137,8 +137,8 @@ public class UserController {
         return "welcome";
     }
 
-    @RequestMapping("/album")
-    public String album(){
-        return "album";
+    @RequestMapping("/userPhotos")
+    public String userPhotos(){
+        return "userPhotos";
     }
 }

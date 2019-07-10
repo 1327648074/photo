@@ -1,10 +1,9 @@
-<!DOCTYPE html >
+﻿<!DOCTYPE html >
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>jQuery文件夹管理插件DEMO演示</title>
     <link rel="shortcut icon" href="/favicon.ico">
-
     <script type="text/javascript" src="/jquery-1.8.8.js"></script>
     <script type="text/javascript">
 
@@ -13,88 +12,51 @@
                 $removenews = $('.remove'),$removeall = $('.removeall'),$removeright = $('#removethispc'),
                 $namehide = $('#divall li input.changename'),$changename = $('#changename');
             $removenews.hide();
-
-
-
-                    $.ajax({
-                        type:"POST",
-                        url:"/image/list",
-                        data:{
-                            path:null
-                        },
-                        success:function (data) {
-                            for (var i = 0; i < data.result.length; i++) {
-                                (function(i){ //这个是function里i，即function的形参，也可以换成j，换成什么变量名都无所谓
-                                    $parent.append("<li class='album' id='b'><input type='text' id='a' class='changename' /></li>");
-                                    $('#a').attr("value",data.result[i].name)
-                                    var x = data.result[i].name
-                                    $("#b").dblclick(function(){
-                                        method(x);
-                                    });
-                                    $("#a").attr("id",x);
-                                    $("#b").attr("id",x);
-
-                                })(i);
-
-                            }
-                            // document.getElementById("divall").innerHTML=menu;
-                        },
-                        error:function () {
-                            alert("请求失败");
-                        }});
-
-
-
-
-
             //新建
             $carry.live('click' , function(){
                 var albumName = prompt("请输入相册名称","新建相册");
-                if (albumName !=null && albumName!=""){
-                    setTimeout(
-                        function(){
-                            // var path=sessionStorage.getItem("username");
-                            $.ajax({
-                                type:"POST",
-                                url:"/image/createFolder",
-                                data:{
-                                    folderName:albumName
-                                },
-                                success:function (data) {
-                                    // $parent.append("<li ondblclick=\"window.location.href='mypictrue.html'\"><input type='text' id='a' \class='changename'\ /></li>");
-                                    $parent.append("<li class='album' id='b'><input type='text' id='a' class='changename' /></li>");
+                var l="D:/Flash作业/图21.jpg";
+                create(albumName,l);
 
-                                    $('#a').attr("value",albumName);
-                                    $("#b").dblclick(function(){
-                                        method(albumName);
-                                    });
-                                    $("#a").attr("id",albumName);
-                                    $("#b").attr("id",albumName);
-                                },
-                                error:function () {
-                                    alert("请求失败");
-                                }})
-
-                        },500);
-                }
 
             });
-            function method(b){
-                $.ajax({
-                    type:"POST",
-                    url:"/image/access",
-                    data:{
-                        name:b
-                    },
-                    success:function (data) {
-                        window.location.href = "/front/myAlbum";
-                    },
-                    error:function () {
-                        alert("请求失败");
-                    }})
 
-            }
 
+            $.ajax({
+                type:"POST",
+                url:"/image/list",
+                data:{
+                    path:null
+                },
+                success:function (data) {
+                    for (var i = 0; i < data.result.length; i++) {
+                        (function(i){ //这个是function里i，即function的形参，也可以换成j，换成什么变量名都无所谓
+                            var  x = "/image/"+data.result[i].path+"/"+data.result[i].name;
+                            create(data.result[i].name,x);
+
+
+                        })(i);
+                    }
+                    // document.getElementById("divall").innerHTML=menu;
+                },
+                error:function () {
+                    alert("请求失败");
+                }});
+
+            function create(albumName,l){
+        if (albumName !=null && albumName!=""){
+                    setTimeout(
+                        function(){
+                            $parent.append("<li id='a' ondblclick=\"window.location.href='dphotos.html'\"></li>");
+                            $("#a").attr("value",albumName);
+                            $("#a").css("background","url("+l+")");
+                            $("#a").css("background-size","100% 100%");
+                            $("#a").removeAttr("id");
+                        },500);
+                }
+}
+
+            //清空
             $removeall.live('click' , function(){
                 alert('确定清空所有相册？')
                 setTimeout(
@@ -104,30 +66,35 @@
                     },500);
             }); //新文件夹不起作用！！
 
+
+            $("#gallery").on("click",function () {
+                window.location.href="/front/tdphotos";
+            })
+
+
             //变色
-            $bgcolor.live('click' , function(){
+                $bgcolor.live('click' , function(){
                 var btns = document.getElementById('removebutton');
                 btns02 = document.getElementById('removethispc');
                 $removenews.fadeIn(250);
                 $(this).addClass('bgclocrc').siblings().removeClass('bgclocrc');
-                // $(this).attr("id",'remove').siblings().attr('id','');
+                $(this).attr("id",'remove').siblings().attr('id','');
                 $( " input[type=text] ").attr("id",'namecc').siblings().attr('id',' ');
                 btns.onclick = function(){//js 调用
-                    alert("1");
-
-
-                    $.ajax({
-                        type:"POST",
-                        url:"/image/access",
-                        data:{
-                            name:path
-                        },
-                        success:function (data) {
-                            alert("success");
-                        },
-                        error:function () {
-                            alert("请求失败");
-                        }})
+                    alert('确定删除相册？');
+                    setTimeout(
+                        function(){
+                            if($bgcolor.hasClass('bgclocrc'))
+                            {
+                                //alert(123)
+                                // document.getElementById('remove').remove();//js
+                                $('#remove').remove();
+                                $removenews.fadeOut(250);
+                            }else
+                            {
+                                alert('请选择相册')
+                            }
+                        },250)
                 }//
 
                 btns02.onclick = function(){//js 调用
@@ -217,18 +184,19 @@
         });
 
     </script>
+
     <style type="text/css">
         * {
             margin: 0;
             padding: 0;
         }
         body{
-            background:rgba(181,236,238,0.2);
-            margin: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+    background:rgba(181,236,238,0.2);
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    }
 
         .alldom {
             width: 85%;
@@ -244,22 +212,29 @@
         ul li {
             overflow: hidden;
             width: 100px;
-            height: 115px;
+            height: 125px;
             float: left;
             margin-left: 55px;
-            background: url("/213125.png") center top no-repeat;
+            background-image: url("timg.jpg");
+            background-repeat:no-repeat ;
+            background-size:100% 100%;           
             border: 1px solid #fff;
             position: relative;
             transition: all 0.2s ease-in 0.1s;
         }
 
         ul li.bgclocrc {
-            background: url("/213125.png") center top no-repeat #f1f2fd;
+            background-image: url("timg.jpg");
+            background-repeat:no-repeat ;
+            background-size:100% 100%;
+            
             border: 1px solid #a7aae3;
         }
 
         ul li:hover {
-            background: url("/213125.png") center top no-repeat #f1f2fd;
+            background-image: url("timg.jpg");
+            background-repeat:no-repeat ;
+            background-size:100% 100%;
             border: 1px solid #a7aae3;
         }
 
@@ -267,7 +242,7 @@
             position: absolute;
             border-radius: 0px;
             left: -25px;
-            bottom: 10px;
+            bottom: 0px;
             overflow: hidden;
             width: 98px;
             height: 20px;
@@ -486,19 +461,21 @@
             right: 0;
         }
     </style>
+
 </head>
 
 <body>
 
 <p>
-    <button class="carrynews" style="vertical-align:middle"><span>新建相册 </span></button>
+    <button class="carrynews" style="vertical-align:middle"><span>添加图片 </span></button>
     <button class="removeall" style="vertical-align:middle"><span>清空相册</span></button>
-    <button class="remove" id="removebutton" style="vertical-align:middle"><span>删除相册</span></button>
+    <button class="3dshow" id = "gallery" style="vertical-align:middle"><span>旋转画廊</span></button>
+    <button class="remove" id="removebutton" style="vertical-align:middle"><span>删除图片</span></button>
 </p><br/>
 
 <div  class="alldom">
     <ul id="divall">
-        <!--        <li ondblclick="window.location.href='image/createFolder'"><input type="text" class="changename" value="123"></li>-->
+
     </ul>
 </div>
 

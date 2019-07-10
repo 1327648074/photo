@@ -136,6 +136,39 @@ public class ImageController {
                 for (Path pathObj : directoryStream) {
                     // 获取文件基本属性
                     BasicFileAttributes attrs = Files.readAttributes(pathObj, BasicFileAttributes.class);
+                    cpath = cpath.replace(ROOT,"");
+                    // 封装返回JSON数据
+                    JSONObject fileItem = new JSONObject();
+                    fileItem.put("name", pathObj.getFileName().toString());
+                    fileItem.put("date", getTime());
+                    fileItem.put("path", cpath.replace("\\","/"));
+                    fileItem.put("size", attrs.size());
+                    fileItem.put("type", attrs.isDirectory() ? "dir" : "img");
+                    fileItems.add(fileItem);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("result", fileItems);
+            return jsonObject;
+        } catch (Exception e) {
+            System.err.println("获取文件列表失败！");
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+    @RequestMapping(value = "/listRoot")
+    public Object listRoot(/*@RequestBody JSONObject json*/@RequestParam(value = "path") String path) throws ServletException {
+        try {
+            String cpath = ROOT+"\\"+USER;
+            // 返回的结果集
+            List<JSONObject> fileItems = new ArrayList<>();
+            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(cpath))) {
+                for (Path pathObj : directoryStream) {
+                    // 获取文件基本属性
+                    BasicFileAttributes attrs = Files.readAttributes(pathObj, BasicFileAttributes.class);
                     // 封装返回JSON数据
                     JSONObject fileItem = new JSONObject();
                     fileItem.put("name", pathObj.getFileName().toString());
@@ -485,6 +518,7 @@ public class ImageController {
         ImageIO.write(toImage, "jpg", new File(cpath, "grayF_" + name));
         File file = new File(cpath, "grayF_" + name);
         saveImage(file);
+
     }
 
     private String getCpath(String path) {
