@@ -37,6 +37,26 @@
 </style>
 
 <script type="text/javascript">
+
+    jQuery(document).ready(function () {
+            var path = sessionStorage.getItem("username");
+            $.ajax({
+                type: "POST",
+                url: "/image/login",
+                data: {
+                    user: path
+                },
+                success: function (data) {
+
+                },
+                error: function () {
+
+                }
+            })
+        })
+</script>
+
+<script type="text/javascript">
     //处理file input加载的图片文件
     $(document).ready(function (e) {
         $("#selectfile").click(function () {

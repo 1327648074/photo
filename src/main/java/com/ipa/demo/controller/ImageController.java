@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -28,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 
 @RestController
 @RequestMapping("/image")
@@ -90,8 +92,8 @@ public class ImageController {
         String path = null;
         String cpath = getCpath(path);
         imageService.upload(file, cpath);
-        System.out.println(FilePath+"\\"+file.getOriginalFilename());
-        return FilePath+"\\"+file.getOriginalFilename();
+        System.out.println(FilePath + "\\" + file.getOriginalFilename());
+        return FilePath + "\\" + file.getOriginalFilename();
     }
 
     @PostMapping(value = "/uploads")
@@ -108,9 +110,12 @@ public class ImageController {
 
     //下载图片
     @RequestMapping(value = "/download")
-    public void downloadImage(HttpServletRequest request, HttpServletResponse response) {
-        String name = request.getParameter("name");
-        String path = request.getParameter("path");
+    public void downloadImage(@RequestParam(value = "path") String path, HttpServletResponse response) {
+        String cpath = ROOT.replace("\\image", path.replace("/", "\\"));
+        GrayscaleFilter filter = new GrayscaleFilter();
+        File f = new File(cpath);
+        String name = f.getName();
+        cpath = cpath.replace("\\" + f.getName(), "");
         Image image = imageRepository.findByNameAndUrl(name, path);
         try {
             imageService.downloadImage(path, name, response);
@@ -136,12 +141,12 @@ public class ImageController {
                 for (Path pathObj : directoryStream) {
                     // 获取文件基本属性
                     BasicFileAttributes attrs = Files.readAttributes(pathObj, BasicFileAttributes.class);
-                    cpath = cpath.replace(ROOT,"");
+                    cpath = cpath.replace(ROOT, "");
                     // 封装返回JSON数据
                     JSONObject fileItem = new JSONObject();
                     fileItem.put("name", pathObj.getFileName().toString());
                     fileItem.put("date", getTime());
-                    fileItem.put("path", cpath.replace("\\","/"));
+                    fileItem.put("path", cpath.replace("\\", "/"));
                     fileItem.put("size", attrs.size());
                     fileItem.put("type", attrs.isDirectory() ? "dir" : "img");
                     fileItems.add(fileItem);
@@ -159,10 +164,11 @@ public class ImageController {
             return e.getMessage();
         }
     }
+
     @RequestMapping(value = "/listRoot")
     public Object listRoot(/*@RequestBody JSONObject json*/@RequestParam(value = "path") String path) throws ServletException {
         try {
-            String cpath = ROOT+"\\"+USER;
+            String cpath = ROOT + "\\" + USER;
             // 返回的结果集
             List<JSONObject> fileItems = new ArrayList<>();
             try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(cpath))) {
@@ -173,7 +179,7 @@ public class ImageController {
                     JSONObject fileItem = new JSONObject();
                     fileItem.put("name", pathObj.getFileName().toString());
                     fileItem.put("date", getTime());
-                    fileItem.put("path",cpath);
+                    fileItem.put("path", cpath);
                     fileItem.put("size", attrs.size());
                     fileItem.put("type", attrs.isDirectory() ? "dir" : "img");
                     fileItems.add(fileItem);
@@ -204,11 +210,10 @@ public class ImageController {
     public String createFolder(@RequestParam String folderName) {
         try {
 //            String path = "792989118@qq.com";
-            File newDir = new File(FilePath+"\\" + folderName);
+            File newDir = new File(FilePath + "\\" + folderName);
             if (!newDir.mkdir()) {
 
-            }
-            else {
+            } else {
                 Image image = new Image();
                 image.setUrl(FilePath);
                 image.setName(folderName);
@@ -454,18 +459,36 @@ public class ImageController {
 
     //裁剪
     @PostMapping(value = "/crop")
-    public String crop(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name,
-                       @RequestParam(value = "x") Integer x, @RequestParam(value = "y") Integer y,
-                       @RequestParam(value = "width") Integer width, @RequestParam(value = "hidth") Integer hidth) {
+    public String crop(@RequestParam(value = "path") String path,
+                       @RequestParam(value = "x") String x, @RequestParam(value = "y") String y,
+                       @RequestParam(value = "width") String width, @RequestParam(value = "hidth") String hidth) {
 
-        String cpath = getCpath(path);
+        Double d3=Double.parseDouble(x);
+        Integer x1 = d3.intValue();
+        Double d4=Double.parseDouble(y);
+        Integer y1 = d4.intValue();
+        Double d1=Double.parseDouble(width);
+        Integer width1 = d1.intValue();
+        Double d2=Double.parseDouble(hidth);
+        Integer hidth1 = d2.intValue();
+        System.out.println(x1);
+        String cpath = ROOT.replace("\\image", path.replace("/", "\\"));
+        GrayscaleFilter filter = new GrayscaleFilter();
+        File f = new File(cpath);
+        String name = f.getName();
+        cpath = cpath.replace("\\" + f.getName(), "");
         try {
             if (imageRepository.findByNameAndUrl("crop_" + x.toString() + "_" + y.toString() + "_" + width.toString() + "_" + hidth.toString() + "_" + name, cpath) == null) {
-                Thumbnails.of(cpath + "\\" + name).sourceRegion(x, y, width, hidth).size(width, hidth).keepAspectRatio(false).toFile(
+                Thumbnails.of(cpath + "\\" + name).sourceRegion(x1, y1, width1, hidth1).size(width1, hidth1).keepAspectRatio(false).toFile(
                         cpath + "\\" + "crop_" + x.toString() + "_" + y.toString() + "_" + width.toString() + "_" + hidth.toString() + "_" + name);
                 File file = new File(cpath, "crop_" + x.toString() + "_" + y.toString() + "_" + width.toString() + "_" + hidth.toString() + "_" + name);
                 saveImage(file);
-                return "success to crop";
+                String nfile = cpath + "\\" + "waterMark" + "_" + name;
+                nfile = nfile.replace(ROOT, "\\image");
+                System.out.println(nfile);
+                nfile = nfile.replace("\\", "/");
+                System.out.println(nfile);
+                return nfile;
             } else {
                 return "fail to zoom for have one";
             }
@@ -475,11 +498,16 @@ public class ImageController {
 
     }
 
+
     //水印
     @PostMapping(value = "/waterMark")
-    public String waterMark(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name) {
+    public String waterMark(@RequestParam(value = "path") String path) {
 
-        String cpath = getCpath(path);
+        String cpath = ROOT.replace("\\image", path.replace("/", "\\"));
+        GrayscaleFilter filter = new GrayscaleFilter();
+        File f = new File(cpath);
+        String name = f.getName();
+        cpath = cpath.replace("\\" + f.getName(), "");
         try {
             if (imageRepository.findByNameAndUrl("waterMark" + "_" + name, cpath) == null) {
 
@@ -488,9 +516,14 @@ public class ImageController {
                         .toFile(cpath + "\\" + "waterMark" + "_" + name);
                 File file = new File(cpath + "\\" + "waterMark" + "_" + name);
                 saveImage(file);
-                return "success to waterMark";
+                String nfile = cpath + "\\" + "waterMark" + "_" + name;
+                nfile = nfile.replace(ROOT, "\\image");
+                System.out.println(nfile);
+                nfile = nfile.replace("\\", "/");
+                System.out.println(nfile);
+                return nfile;
             } else {
-                return "fail to zoom for have one";
+                return "fail to watermark for have one";
             }
         } catch (Exception e) {
             return e.getMessage();
@@ -501,12 +534,14 @@ public class ImageController {
     //滤镜处理
     //黑白滤镜
     @PostMapping(value = "/grayFilter")
-    public void gray(@RequestParam(value = "path") String path, @RequestParam(value = "name") String name) throws IOException {
+    public String gray(@RequestParam(value = "path") String path) throws IOException {
 
-        String cpath = getCpath(path);
         // 定义过滤器
+        String cpath = ROOT.replace("\\image", path.replace("/", "\\"));
         GrayscaleFilter filter = new GrayscaleFilter();
-
+        File f = new File(cpath);
+        String name = f.getName();
+        cpath = cpath.replace("\\" + f.getName(), "");
 
         BufferedImage fromImage = ImageIO.read(new File(cpath, name));
         int width = fromImage.getWidth();
@@ -518,6 +553,13 @@ public class ImageController {
         ImageIO.write(toImage, "jpg", new File(cpath, "grayF_" + name));
         File file = new File(cpath, "grayF_" + name);
         saveImage(file);
+
+        String nfile = cpath + "\\" + "grayF_" + name;
+        nfile = nfile.replace(ROOT, "\\image");
+        System.out.println(nfile);
+        nfile = nfile.replace("\\", "/");
+        System.out.println(nfile);
+        return nfile;
 
     }
 

@@ -1,0 +1,983 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <script src="/jquery-1.8.8.js"></script>
+    <title>3D相册</title>
+    <script>
+        $.ajax({
+            type: "POST",
+            url: "/image/list",
+            contentType: "charset=UTF-8",
+            data: {
+                path: null
+            },
+            success: function (data) {
+                for (var i = 0; i < data.result.length; i++) {
+                    (function (i) { //这个是function里i，即function的形参，也可以换成j，换成什么变量名都无所谓
+                        var x = "/image/" + data.result[i].path + "/" + data.result[i].name;
+                        list[i]=x;
+                    })(i);
+                }
+                var photosDom = document.getElementById('photos');
+                var images = photosDom.getElementsByTagName('img');
+                maxnum=list.length-1;
+                images[0].src=list[0];
+                images[1].src=list[1];
+                images[5].src=list[maxnum];
+            },
+            error: function () {
+                alert("请求失败");
+            }
+        });
+    </script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background: rgba(181, 236, 238, 0.2);
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #s {
+            perspective: 4000px;
+        }
+
+        #photos {
+            width: 420px;
+            height: 380px;
+            margin: 120px auto;
+            transform-style: preserve-3d; /*设置3d环境*/
+            transform-origin: 50% 50%;
+
+        }
+
+        #photos img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            box-shadow: 1px -1px 6px #666;
+            border-radius: 4px;
+            -webkit-box-reflect: below 3px -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.5));
+            cursor: pointer;
+            backface-visibility: hidden;
+
+        }
+
+        #photos div {
+            width: 1200px;
+            height: 1200px;
+            border-radius: 50%;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -600px;
+            margin-top: -600px;
+            transform: rotateX(90deg);
+            background: -webkit-radial-gradient(center center, 600px 600px, rgba(158, 158, 222, 0.5), rgba(0, 0, 0, 0));
+        }
+
+
+        #x {
+            position: absolute;
+            float: left;
+            left: 200px;
+            top: 200px;
+        }
+
+        #y {
+            float: right;
+            position: absolute;
+            right: 200px;
+            top: 200px;
+        }
+
+        button {
+            display: inline;
+            position: relative;
+            margin-top: 3px;
+        }
+
+
+        #btn {
+            text-align: center;
+            font-size: 0;
+        }
+
+        #btn button, #btn button:visited {
+            font-size: 14px;
+            font-family: Arial;
+            font-weight: normal;
+            border: 1px solid #dcdcdc;
+            padding: 9px 18px;
+            text-decoration: none;
+            /*background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #ededed), color-stop(100%, #dfdfdf) );
+            background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+            background:-ms-linear-gradient( top, #ededed 5%, #dfdfdf 100% );
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');*/
+            background-color: #fafafa;
+            color: #777777;
+            display: inline-block;
+            text-shadow: 1px 1px 1px #ffffff;
+            -webkit-box-shadow: inset 1px 1px 0px 0px #ffffff;
+            -moz-box-shadow: inset 1px 1px 0px 0px #ffffff;
+            box-shadow: inset 1px 1px 0px 0px #ffffff;
+            outline: none;
+        }
+
+        #btn button:hover {
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #dfdfdf), color-stop(100%, #ededed));
+            background: -moz-linear-gradient(center top, #dfdfdf 5%, #ededed 100%);
+            background: -ms-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+            background-color: #dfdfdf;
+        }
+
+        #return, #fliter_confirm {
+            border-top-left-radius: 42px;
+            border-bottom-left-radius: 42px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        #download, #fliter_cancel {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-top-right-radius: 42px;
+            border-bottom-right-radius: 42px;
+        }
+
+
+        #dofliter {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        #fliter_select {
+            font-size: 28px;
+            width: 200px;
+            margin-right: 20px;
+            vertical-align: middle;
+            border-radius: 42px;
+            outline: none;
+            background-color: #fafafa;
+            color: #000000;
+            text-align: center;
+            text-align-last: center;
+        }
+
+        #dofliter button {
+            vertical-align: middle;
+        }
+
+
+        #crop_image {
+            float: left;
+            width: 55%;
+            background-color: #333;
+            user-select: none;
+            margin: 3% 20%;
+            border: 1px solid #DEDEDE;
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            border-radius: 6px;
+            -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+            display: none;
+            text-align: center;
+        }
+
+        #crop_image_top, #crop_image_bottom {
+            float: left;
+            width: 96%;
+            padding: 2%;
+            background-color: white;
+        }
+
+        /* 底部 */
+        #crop_image_bottom {
+            text-align: right;
+        }
+
+        #crop_image_bottom input {
+            height: 30px;
+            padding: 5px 15px;
+            border-radius: 3px;
+            border: none;
+            margin-left: 20px;
+            outline: none;
+        }
+
+        #submitBtn {
+            background-color: #40aff2;
+            color: white;
+            cursor: pointer;
+        }
+
+        #submitBtn:HOVER {
+            background-color: #409ff2;
+        }
+
+        /* 顶部 */
+        #crop_image_top h4 {
+            margin: 0;
+            padding: 0;
+            font-weight: normal;
+        }
+
+        /* 裁剪部分 */
+        #crop_image_content {
+            float: left;
+            position: relative;
+            text-align: center;
+            width: 92%;
+            margin: 4%;
+        }
+
+        #cropBox {
+            position: relative;
+            height: auto;
+            width: auto;
+        }
+
+        #crop_image_content #cropimg1 {
+            opacity: 0.5;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #crop_image_content #cropimg2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            clip: rect(0, 150px, 150px, 0);
+        }
+
+        #crop_image_content #mainBox {
+            border: 1px solid white;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150px;
+            height: 150px;
+            cursor: move;
+            draggable: none;
+            z-index: 999;
+        }
+
+
+        .minBox {
+            position: absolute;
+            height: 8px;
+            width: 8px;
+            background-color: white;
+        }
+
+        .left-up {
+            top: -4px;
+            left: -4px;
+            cursor: nw-resize;
+        }
+
+        .up {
+            left: 50%;
+            margin-left: -4px;
+            top: -4px;
+            cursor: n-resize;
+        }
+
+        .right-up {
+            right: -4px;
+            top: -4px;
+            cursor: ne-resize;
+        }
+
+        .left {
+            top: 50%;
+            margin-top: -4px;
+            left: -4px;
+            cursor: w-resize;
+        }
+
+        .right {
+            top: 50%;
+            margin-top: -4px;
+            right: -4px;
+            cursor: w-resize;
+        }
+
+        .left-down {
+            bottom: -4px;
+            left: -4px;
+            cursor: sw-resize;
+        }
+
+        .down {
+            bottom: -4px;
+            left: 50%;
+            margin-left: -4px;
+            cursor: s-resize;
+        }
+
+        .right-down {
+            bottom: -4px;
+            right: -4px;
+            cursor: se-resize;
+        }
+
+    </style>
+
+    <script>
+        /*设置图片框3d位置*/
+        window.onload = function () {
+            var photosDom = document.getElementById('photos');
+            var images = photosDom.getElementsByTagName('img');
+            var len = images.length;
+            var d = Math.floor(360 / len);
+            for (var i = 0; i < len; i++) {
+                images[i].style = 'transform : rotateY(' + d * i + 'deg) translateZ(450px)';
+            }
+            var x = 0;
+            /*setInterval(function(){
+            photosDom.style.transform = "rotateX(-0deg) rotateY("+ (x++) * 0.3 +"deg)";
+            },30);*/
+        }
+    </script>
+    <script>
+        var i = 0;
+        var x = 0;
+        var n1 = 1;
+        var n2 = 1;
+
+        var list = new Array();/*图像地址数组*/
+        var imgnum=0;/*记录图片编号*/
+        var maxnum=0;/*记录相册内图片总数*/
+        var bordernum=0;/*记录图框编号*/
+        /*初始化函数*/
+        /*function init(){
+        var photosDom = document.getElementById('photos');
+        var images = photosDom.getElementsByTagName('img');
+        var len = images.length;
+        for(var t = 0; t < len;t++){
+            images[i].src = '';
+        }
+        }*/
+
+
+        /*右转函数*/
+        function c() {
+            var photosDom = document.getElementById('photos');
+            var images = photosDom.getElementsByTagName('img');
+            if(bordernum==0){
+                if(imgnum==0){images[4].src=list[maxnum-1]; }
+                else if(imgnum==1){images[4].src=list[maxnum];}
+                else{images[4].src=list[imgnum-2];}
+            }
+            else if(bordernum==1){
+                if(imgnum==0){images[5].src=list[maxnum-1]; }
+                else if(imgnum==1){images[5].src=list[maxnum];}
+                else{images[5].src=list[imgnum-2];}
+            }
+            else {
+                if(imgnum==0){images[bordernum-2].src=list[maxnum-1]; }
+                else if(imgnum==1){images[bordernum-2].src=list[maxnum];}
+                else{images[bordernum-2].src=list[imgnum-2];}
+            }
+            // alert(bordernum);
+            // alert(imgnum);
+            bordernum--;
+            imgnum--;
+            if(bordernum<0){bordernum=5;}
+            if(imgnum<0){imgnum=maxnum;}
+            var l = window.setInterval(function () {
+                if (n1 >= 150) {
+                    clearInterval(l);
+                    n1 = 0;
+
+                }
+                x++;
+                photosDom.style.transform = "rotateX(-0deg) rotateY(+" + x * 0.4 + "deg)";
+                n1++;
+            }, 5);
+            /*setTimeout(function(){clearInterval(l)});*/
+        }
+
+
+        /*左移函数*/
+        function d() {
+            var photosDom = document.getElementById('photos');
+            var images = photosDom.getElementsByTagName('img');
+            if(bordernum==4){
+                if(imgnum==maxnum-1){images[0].src=list[0]; }
+                else if(imgnum==maxnum){images[0].src=list[1];}
+                else{images[0].src=list[imgnum+2];}
+            }
+            else if(bordernum==5){
+                if(imgnum==maxnum-1){images[1].src=list[0]; }
+                else if(imgnum==maxnum){images[1].src=list[1];}
+                else{images[1].src=list[imgnum+2];}
+            }
+            else {
+                if(imgnum==maxnum-1){images[bordernum+2].src=list[0]; }
+                else if(imgnum==maxnum){images[bordernum+2].src=list[1];}
+                else{images[bordernum+2].src=list[imgnum+2];}
+            }
+            var i = window.setInterval(function () {
+                if (n2 >= 150) {
+                    clearInterval(i);
+                    n2 = 0;
+
+
+                    bordernum++;
+                    imgnum++;
+                    if(bordernum>=6){bordernum=0;}
+                    if(imgnum>maxnum){imgnum=0;}
+                }
+                x--;
+                photosDom.style.transform = "rotateX(-0deg) rotateY(" + x * 0.4 + "deg)";
+                n2++;
+            }, 5);
+            /*setTimeout(function(){clearInterval(l)});*/
+        }
+
+    </script>
+    <script>
+
+        var src;
+
+        $(function () {
+            $(".pimg").click(function () {
+                var _this = $(this);//将当前的pimg元素作为_this传入函数
+                imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
+            });
+        });
+
+        function imgShow(outerdiv, innerdiv, bigimg, _this) {
+            src = _this.attr("src");//获取当前点击的pimg元素中的src属性
+            $("#bigimg").attr("src", src);
+            $("#cropimg1").attr("src", src);
+            $("#cropimg2").attr("src", src);//设置#bigimg元素的src属性
+            current = 0;
+            var bigimg = document.getElementById('bigimg');
+            bigimg.style.transform = "rotateZ(" + current + "deg)";
+            /*获取当前点击图片的真实大小，并显示弹出层及大图*/
+            $("<img/>").attr("src", src).load(function () {
+                var windowW = $(window).width();//获取当前窗口宽度
+                var windowH = $(window).height();//获取当前窗口高度
+                var realWidth = this.width;//获取图片真实宽度
+                var realHeight = this.height;//获取图片真实高度
+                var imgWidth, imgHeight;
+                var scale = 0.8;//缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放
+
+                if (realHeight > windowH * scale) {//判断图片高度
+                    imgHeight = windowH * scale;//如大于窗口高度，图片高度进行缩放
+                    imgWidth = imgHeight / realHeight * realWidth;//等比例缩放宽度
+                    if (imgWidth > windowW * scale) {//如宽度扔大于窗口宽度
+                        imgWidth = windowW * scale;//再对宽度进行缩放
+                    }
+                } else if (realWidth > windowW * scale) {//如图片高度合适，判断图片宽度
+                    imgWidth = windowW * scale;//如大于窗口宽度，图片宽度进行缩放
+                    imgHeight = imgWidth / realWidth * realHeight;//等比例缩放高度
+                } else {//如果图片真实高度和宽度都符合要求，高宽不变
+                    imgWidth = realWidth;
+                    imgHeight = realHeight;
+                }
+                $(bigimg).css("width", imgWidth);//以最终的宽度对图片缩放
+                var w = (windowW - imgWidth) / 2;//计算图片与窗口左边距
+                var h = (windowH - imgHeight) / 2;//计算图片与窗口上边距
+
+                $(innerdiv).css({"top": h, "left": w});//设置#innerdiv的top和left属性
+                if (imgWidth >= imgHeight) {
+                    $("#innerdiv").css("width", imgWidth);
+                    $("#innerdiv").css("height", imgWidth);
+                    $(innerdiv).css({"top": h, "left": w, "width": imgWidth, "height": imgWidth});
+                } else {
+                    $("#innerdiv").css("width", imgHeight);
+                    $("#innerdiv").css("height", imgHeight);
+                    $("#innerdiv").css({"top": h, "left": w, "width": imgHeight, "height": imgHeight});
+                }
+                $(outerdiv).fadeIn("fast");//淡入显示#outerdiv及.pimg
+            });
+
+            $("#return").click(function () {
+                $("#outerdiv").fadeOut("fast");
+            });
+
+            var current = 0;
+            $("#turnleft").click(function () {
+                var bigimg = document.getElementById('bigimg');
+                current = current - 90;
+                bigimg.style.transform = "rotateZ(" + current + "deg)";
+                var bigimg = document.getElementById('bigimg');
+            });
+            $("#turnright").click(function () {
+                var bigimg = document.getElementById('bigimg');
+                current = current + 90;
+                bigimg.style.transform = "rotateZ(" + current + "deg)";
+            });
+            $("#return").click(function () {
+                $("#outerdiv").fadeOut("fast");
+            });
+
+            $("#cutting").click(function () {
+                $("#innerdiv").fadeOut("fast");
+                $("#btn").fadeOut("fast");
+                $("#crop_image").fadeIn("fast");
+                cutting();
+            });
+
+            $("#cancel").click(function () {
+                $("#crop_image").fadeOut("fast");
+                $("#innerdiv").fadeIn();
+                $("#btn").fadeIn();
+            });
+
+            $("#fliter").click(function () {
+                $("#btns").fadeOut("fast");
+                $("#dofliter").fadeIn();
+            });
+             /*滤镜类型*/
+            $("#fliter_select").change(function () {
+                var srcb = document.getElementById("bigimg");
+                var a = srcb.getAttribute('src');
+                $.ajax({
+                    type: "POST",
+                    url: "/image/grayFilter",
+
+                    data: {
+                        path: a
+                    },
+                    success: function (data) {
+                        alert(data);
+                        var imgsrc = document.getElementById("bigimg");
+                        imgsrc.src = data;
+                    },
+                    error: function () {
+
+                    }
+                })
+            });
+
+
+            $("#shuiyin").click(function () {
+                var srcb = document.getElementById("bigimg");
+                var a = srcb.getAttribute('src');
+                $.ajax({
+                    type: "POST",
+                    url: "/image/waterMark",
+                    data: {
+                        path: a
+                    },
+                    success: function (data) {
+                        var imgsrc = document.getElementById("bigimg");
+                        imgsrc.src = data;
+                    },
+                    error: function () {
+
+                    }
+                })
+
+            });
+            $("#fliter_cancel").click(function () {
+                $("#dofliter").fadeOut("fast");
+                $("#btns").fadeIn("fast");
+            });
+        }
+
+
+        var rate = 1;
+
+        function cutting() {
+            /*根据窗口大小调整图片大小*/
+            var windowW = $(window).width();//获取当前窗口宽度  
+            var windowH = $(window).height();//获取当前窗口高度  
+            var cropimgElem = new Image();
+            cropimgElem.src = src;
+            var cropimgElemWidth = cropimgElem.width;
+            var cropimgElemHeight = cropimgElem.height;
+            var cropimgElemPosition = getPosition(cropimgElem);
+            var imgWidth, imgHeight;
+            var scale = 0.7;//缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放       
+            if (cropimgElemHeight > windowH * scale) {//判断图片高度
+                imgHeight = windowH * scale;//如大于窗口高度，图片高度进行缩放
+                imgWidth = imgHeight / cropimgElemHeight * cropimgElemWidth;//等比例缩放宽度
+                if (imgWidth > windowW * scale) {//如宽度扔大于窗口宽度
+                    imgWidth = windowW * scale;//再对宽度进行缩放
+
+                }
+            } else if (cropimgElemWidth > windowW * scale) {//如图片高度合适，判断图片宽度
+                imgWidth = windowW * scale;//如大于窗口宽度，图片宽度进行缩放
+                imgHeight = imgWidth / cropimgElemWidth * cropimgElemHeight;//等比例缩放高度
+            } else {//如果图片真实高度和宽度都符合要求，高宽不变  
+                imgWidth = cropimgElemWidth;
+                imgHeight = cropimgElemHeight;
+            }
+            $("#cropimg1").css("width", imgWidth);
+            $("#cropimg1").css("height", imgHeight);
+            $("#cropimg2").css("width", imgWidth);
+            $("#cropimg2").css("height", imgHeight);
+            $("#cropimg3").css("width", imgWidth);
+            $("#cropimg3").css("height", imgHeight); //以最终的宽度对图片缩放
+            rate = imgWidth / cropimgElemWidth;        //记录缩放比
+            document.onselectstart = new Function('event.returnValue=false;');
+            // 裁剪框拖动
+            var minX = cropimgElemPosition.left;// 待裁剪的图片最小x坐标
+            var maxX = cropimgElemPosition.left + imgWidth;// 待裁剪的图片最大x坐标
+            var minY = cropimgElemPosition.top;// 待裁剪的图片最小y坐标
+            var maxY = cropimgElemPosition.top + imgHeight;// 待裁剪的图片最大y坐标
+
+            // 动态设置父控件的宽度和高度
+            var cropBox = document.getElementById("cropBox");
+            cropBox.style.width = imgWidth + "px";
+            cropBox.style.height = imgHeight + "px";
+            // 预览框设置
+            /*var preview = document.getElementById("preview");
+            preview.style.width = imgWidth + "px";
+            preview.style.height =imgHeight + "px";
+            preview.style.left = imgWidth+10 + "px";*/
+
+            // 裁剪框内相关元素
+            var mainBoxElem = document.getElementById("mainBox");// 裁剪框
+            var rightElem = document.getElementById("right");
+            var upElem = document.getElementById("up");
+            var leftElem = document.getElementById("left");
+            var downElem = document.getElementById("down");
+            var leftUpElem = document.getElementById("left-up");
+            var rightUpElem = document.getElementById("right-up");
+            var leftDownElem = document.getElementById("left-down");
+            var rightDownElem = document.getElementById("right-down");
+
+            var ifKeyDown = false;// 鼠标按下事件
+            var contact = "";// 表示被按下触点
+            // 鼠标按下事件
+            rightElem.onmousedown = function (e) {
+                e.stopPropagation();
+                ifKeyDown = true;
+                contact = "right";
+            };
+            upElem.onmousedown = function (e) {
+                e.stopPropagation();
+                ifKeyDown = true;
+                contact = "up";
+            };
+            leftElem.onmousedown = function (e) {
+                e.stopPropagation();
+                ifKeyDown = true;
+                contact = "left";
+            };
+            downElem.onmousedown = function (e) {
+                e.stopPropagation();
+                ifKeyDown = true;
+                contact = "down";
+            };
+            leftUpElem.onmousedown = function (e) {
+                e.stopPropagation();
+                ifKeyDown = true;
+                contact = "left-up";
+            };
+            rightUpElem.onmousedown = function (e) {
+                e.stopPropagation();
+                ifKeyDown = true;
+                contact = "right-up";
+            };
+            leftDownElem.onmousedown = function (e) {
+                e.stopPropagation();
+                ifKeyDown = true;
+                contact = "left-down";
+            };
+            rightDownElem.onmousedown = function (e) {
+                e.stopPropagation();
+                ifKeyDown = true;
+                contact = "right-down";
+            };
+            // 鼠标松开事件
+            window.onmouseup = function (e) {
+                ifKeyDown = false;
+                contact = "";
+            };
+            // 鼠标移动事件
+            window.onmousemove = function (e) {
+                e.stopPropagation();
+                if (ifKeyDown == true) {
+                    switch (contact) {
+                        case "right":
+                            rightMove(e);
+                            break;
+                        case "up":
+                            upMove(e);
+                            break;
+                        case "left":
+                            leftMove(e);
+                            break;
+                        case "down":
+                            downMove(e);
+                            break;
+                        case "left-up":
+                            leftMove(e);
+                            upMove(e);
+                            break;
+                        case "right-up":
+                            rightMove(e);
+                            upMove(e);
+                            break;
+                        case "left-down":
+                            leftMove(e);
+                            downMove(e);
+                            break;
+                        case "right-down":
+                            rightMove(e);
+                            downMove(e);
+                            break;
+                        default:
+                            break;
+                    }
+                    setChoice();
+                }
+            };
+
+            setChoice();// 初始化选择区域可见
+
+            // 右边移动
+            function rightMove(e) {
+                var x = e.clientX;// 鼠标x坐标
+//      if(x > getPosition(cropimgElem).left + cropimgElem.offsetWidth){
+//          x = getPosition(cropimgElem).left + cropimgElem.offsetWidth;
+//      }
+                if (x > maxX + 342 || x < minX + 342) {
+
+                    return;
+                }
+                var widthBefore = mainBoxElem.offsetWidth - 2;// 裁剪框变化前的宽度
+                var addWidth = x - getPosition(mainBoxElem).left - widthBefore;// 鼠标移动后，裁剪框增加的宽度
+                var width = widthBefore + addWidth;
+                if (width < 1) {
+                    return;
+                }
+                mainBoxElem.style.width = width + "px";// 裁剪框变化后，设置宽度
+            };
+
+            // 上边移动
+            function upMove(e) {
+                var y = e.clientY;// 鼠标y坐标
+                if (y > maxY + 136 || y < minY + 136) {
+                    return;
+                }
+                var mainY = getPosition(mainBoxElem).top;// 裁剪框相对于屏幕上边的距离
+                var heightBefore = mainBoxElem.offsetHeight - 2;// 裁剪框变化前的高度
+                var addHeight = mainY - y;// 鼠标移动后，裁剪框增加的高度
+                var height = heightBefore + addHeight;
+                if (height < 1) {
+                    return;
+                }
+                mainBoxElem.style.height = height + "px";// 裁剪框变化后，设置高度
+                mainBoxElem.style.top = mainBoxElem.offsetTop - addHeight + "px";// 裁剪框相对于父控件的距离
+            };
+
+            // 左边移动
+            function leftMove(e) {
+                var x = e.clientX;// 鼠标x坐标
+//      if(x < getPosition(cropimgElem).left){
+//          x = getPosition(cropimgElem).left;
+//      }
+                if (x > maxX + 342 || x < minX + 342) {
+                    return;
+                }
+                var mainX = getPosition(mainBoxElem).left;
+                var widthBefore = mainBoxElem.offsetWidth - 2;// 裁剪框变化前的宽度
+                var addWidth = mainX - x;// 鼠标移动后，裁剪框增加的宽度
+                var width = widthBefore + addWidth;
+                if (width < 1) {
+                    return;
+                }
+                mainBoxElem.style.width = width + "px";// 裁剪框变化后，设置宽度
+                mainBoxElem.style.left = mainBoxElem.offsetLeft - addWidth + "px";// 裁剪框变化后，设置到父元素左边的距离
+            };
+
+            // 下边移动
+            function downMove(e) {
+                var y = e.clientY;// 鼠标y坐标
+//      if(y > getPosition(cropimgElem).top + cropimgElem.offsetHeight){
+//          y = getPosition(cropimgElem).top + cropimgElem.offsetHeight;
+//      }
+                if (y > maxY + 136 || y < minY + 136) {
+                    return;
+                }
+                var heightBefore = mainBoxElem.offsetHeight - 2;// 裁剪框变化前的高度
+                var mainY = getPosition(mainBoxElem).top;// 裁剪框相对于屏幕上边的距离
+                var addHeight = y - heightBefore - mainY;// 增加的高度
+                var height = heightBefore + addHeight;
+                if (height < 1) {
+                    return;
+                }
+                mainBoxElem.style.height = height + "px";// 裁剪框变化后，设置高度
+            };
+
+            // 设置裁剪框的位置
+            function setChoice() {
+                var top = mainBoxElem.offsetTop;
+                var right = mainBoxElem.offsetLeft + mainBoxElem.offsetWidth;
+                var bottom = mainBoxElem.offsetTop + mainBoxElem.offsetHeight;
+                var left = mainBoxElem.offsetLeft;
+                var cropimg2 = document.getElementById("cropimg2");
+                cropimg2.style.clip = "rect(" + top + "px, " + right + "px, " + bottom + "px, " + left + "px)";
+                /*setPreview();*/
+            };
+
+            // 预览函数
+            /*function setPreview() {
+                var top = mainBoxElem.offsetTop;
+                var right = mainBoxElem.offsetLeft + mainBoxElem.offsetWidth;
+                var bottom = mainBoxElem.offsetTop + mainBoxElem.offsetHeight;
+                var left = mainBoxElem.offsetLeft;
+                var previewImg = document.getElementById("cropimg3");
+                previewImg.style.top = -top + "px";
+                previewImg.style.left = -left + "px";
+                previewImg.style.clip = "rect(" + top + "px, " + right + "px, " + bottom + "px, " + left + "px)";
+            }*/
+
+        };
+
+        // 获取元素相对于屏幕左边的距离 offsetLeft，offsetTop
+        function getPosition(node) {
+            var left = node.offsetLeft;
+            var top = node.offsetTop;
+            var parent = node.offsetParent;
+            while (parent != null) {
+                left += parent.offsetLeft;
+                top += parent.offsetTop;
+                parent = parent.offsetParent;
+            }
+            return {"left": left, "top": top};
+        };
+
+        function saveCropImage() {
+            // 需要获取裁剪之后，裁剪框的宽度和高度，以及裁剪框相对于裁剪图片的坐标位置
+            var mainBox = document.getElementById("mainBox");
+            // 裁剪框的宽度
+            var width = mainBox.clientWidth / rate;
+            // 裁剪框的高度
+            var height = mainBox.clientHeight / rate;
+            // 相对于裁剪图片x左边
+            var x = mainBox.offsetLeft / rate;
+            // 相对于裁剪图片y左边
+            var y = mainBox.offsetTop / rate;
+            var srcb = document.getElementById("bigimg");
+            var a = srcb.getAttribute('src');
+            $.ajax({
+                type: "POST",
+                url: "/image/crop",
+                data: {
+                    path :a,
+                    x: x,
+                    y:y,
+                    width: width,
+                    hidth: height
+
+                },
+                success: function (data) {
+                    alert(data);
+                    var imgsrc = document.getElementById("bigimg");
+                    imgsrc.src = data;
+
+                },
+                error: function () {
+                    alert("请求失败");
+                }
+            });
+
+            // AjaxFileUpload提交 或者 jQuery提交表单
+        };
+
+
+    </script>
+
+</head>
+<body>
+<div id="s">
+    <div id="photos">
+        <img class="pimg" src=""/>
+        <img class="pimg" src=""/>
+        <img class="pimg" src=""/>
+        <img class="pimg" src=""/>
+        <img class="pimg" src=""/>
+        <img class="pimg" src=""/>
+        <div></div>
+    </div>
+</div>
+<div id="x">
+    <img src="/左移按钮.png" style="opacity:0.8;" onclick="d()">
+</div>
+<div id="y">
+    <img src="/右移按钮.png" style="opacity:0.8;" onclick="c()">
+</div>
+
+<div id="outerdiv"
+     style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none">
+    <div id="innerdiv" style="position:absolute;">
+        <img id="bigimg" style="border:5px solid #fff;" src="" ;/><br></div>
+    <div id="btn">
+        <div id="btns">
+            <button id="return">返回</button>
+            <button id="turnleft">左转</button>
+            <button id="turnright">右转</button>
+            <button id="cutting">裁剪</button>
+            <button id="shuiyin">水印</button>
+            <button id="fliter">滤镜</button>
+            <button id="download">下载</button>
+        </div>
+        <div id="dofliter" style="display:none">
+            <select id="fliter_select">
+                <option value="no">无</option>
+                <option value="black">黑白</option>
+                <option value="soft">柔和</option>
+            </select>
+            <button id="fliter_confirm">确定</button>
+            <button id="fliter_cancel">取消</button>
+        </div>
+        <img id="cropimg3" hidden="true"></div>
+
+
+    <div id="crop_image">
+        <div id="crop_image_top">
+            <h4>编辑图片</h4>
+        </div>
+
+        <div id="crop_image_content">
+
+            <div id="cropBox">
+                <img id="cropimg1" draggable="false" alt="" src="">
+                <img id="cropimg2" draggable="false" alt="" src="">
+                <div id="mainBox">
+                    <div id="left-up" class="minBox left-up"></div>
+                    <div id="up" class="minBox up"></div>
+                    <div id="right-up" class="minBox right-up"></div>
+                    <div id="left" class="minBox left"></div>
+                    <div id="right" class="minBox right"></div>
+                    <div id="left-down" class="minBox left-down"></div>
+                    <div id="down" class="minBox down"></div>
+                    <div id="right-down" class="minBox right-down"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="crop_image_bottom">
+            <input class="btn" type="button" id="cancel" value="取消">
+            <input id="submitBtn" class="btn" type="button" value="确定" onclick="saveCropImage()">
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,43 +1,43 @@
 ﻿<!DOCTYPE html >
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>jQuery文件夹管理插件DEMO演示</title>
     <link rel="shortcut icon" href="/favicon.ico">
     <script type="text/javascript" src="/jquery-1.8.8.js"></script>
     <script type="text/javascript">
 
-        jQuery(document).ready(function (){
-            var $parent = $('#divall'),$bgcolor = $('#divall li'),$carry = $('.carrynews'),
-                $removenews = $('.remove'),$removeall = $('.removeall'),$removeright = $('#removethispc'),
-                $namehide = $('#divall li input.changename'),$changename = $('#changename');
+        jQuery(document).ready(function () {
+            var $parent = $('#divall'), $bgcolor = $('#divall li'), $carry = $('.carrynews'),
+                $removenews = $('.remove'), $removeall = $('.removeall'), $removeright = $('#removethispc'),
+                $namehide = $('#divall li input.changename'), $changename = $('#changename');
             $removenews.hide();
 
 
-            var path=sessionStorage.getItem("username");
+            var path = sessionStorage.getItem("username");
             $.ajax({
-                type:"POST",
-                url:"/image/login",
-                data:{
-                    user:path
+                type: "POST",
+                url: "/image/login",
+                data: {
+                    user: path
                 },
                 success: function (data) {
                     $.ajax({
-                        type:"POST",
-                        url:"/image/list",
-                        data:{
-                            path:path
+                        type: "POST",
+                        url: "/image/list",
+                        data: {
+                            path: path
                         },
-                        success:function (data) {
+                        success: function (data) {
                             for (var i = 0; i < data.result.length; i++) {
-                                (function(i){ //这个是function里i，即function的形参，也可以换成j，换成什么变量名都无所谓
+                                (function (i) { //这个是function里i，即function的形参，也可以换成j，换成什么变量名都无所谓
                                     $parent.append("<li class='album' id='b'><input type='text' id='a' class='changename' /></li>");
-                                    $('#a').attr("value",data.result[i].name);
+                                    $('#a').attr("value", data.result[i].name);
                                     var x = data.result[i].name;
-                                    $("#b").dblclick(function(){
+                                    $("#b").dblclick(function () {
                                         method(x);
                                     });
-                                    $('#a').attr("id",x);
+                                    $('#a').attr("id", x);
                                     // $("#a").removeAttr("id");
                                     $("#b").removeAttr("id");
 
@@ -46,9 +46,10 @@
                             }
                             // document.getElementById("divall").innerHTML=menu;
                         },
-                        error:function () {
+                        error: function () {
                             alert("请求失败");
-                        }});
+                        }
+                    });
                 },
                 error: function () {
 
@@ -56,98 +57,95 @@
             })
 
 
-
-
-
             //新建
-            $carry.live('click' , function(){
-                var albumName = prompt("请输入相册名称","新建相册");
-                if (albumName !=null && albumName!=""){
+            $carry.live('click', function () {
+                var albumName = prompt("请输入相册名称", "新建相册");
+                if (albumName != null && albumName != "") {
                     setTimeout(
-                        function(){
+                        function () {
                             // var path=sessionStorage.getItem("username");
                             $.ajax({
-                                type:"POST",
-                                url:"/image/createFolder",
-                                data:{
-                                    folderName:albumName
+                                type: "POST",
+                                url: "/image/createFolder",
+                                data: {
+                                    folderName: albumName
                                 },
-                                success:function (data) {
+                                success: function (data) {
                                     // $parent.append("<li ondblclick=\"window.location.href='mypictrue.html'\"><input type='text' id='a' \class='changename'\ /></li>");
                                     $parent.append("<li class='album' id='b'><input type='text' id='a' class='changename' /></li>");
 
-                                    $('#a').attr("value",albumName);
-                                    $("#b").dblclick(function(){
+                                    $('#a').attr("value", albumName);
+                                    $("#b").dblclick(function () {
                                         method(albumName);
                                     });
-                                    $("#a").attr("id",albumName);
-                                    $("#b").attr("id",albumName);
+                                    $("#a").attr("id", albumName);
+                                    $("#b").attr("id", albumName);
                                 },
-                                error:function () {
+                                error: function () {
                                     alert("请求失败");
-                                }})
+                                }
+                            })
 
-                        },500);
+                        }, 500);
                 }
 
             });
-            function method(b){
+
+            function method(b) {
                 $.ajax({
-                            type:"POST",
-                            url:"/image/access",
-                            data:{
-                                name:b
-                            },
-                            success:function (data) {
-                                window.location.href = "/front/userPhotos";
-                            },
-                            error:function () {
-                                alert("请求失败");
-                            }})
+                    type: "POST",
+                    url: "/image/access",
+                    // contentType: "charset=UTF-8",
+                    data: {
+                        name: b
+                    },
+                    success: function (data) {
+                        window.location.href = "/front/userPhotos";
+                    },
+                    error: function () {
+                        alert("请求失败");
+                    }
+                })
 
             }
 
-            $removeall.live('click' , function(){
+            $removeall.live('click', function () {
                 alert('确定清空所有相册？')
                 setTimeout(
-                    function(){
+                    function () {
                         $parent.empty();
 
-                    },500);
+                    }, 500);
             }); //新文件夹不起作用！！
 
-            $bgcolor.live('click' , function(){
+            $bgcolor.live('click', function () {
                 var btns = document.getElementById('removebutton');
                 btns02 = document.getElementById('removethispc');
                 $removenews.fadeIn(250);
                 // $(this).addClass('bgclocrc').siblings().removeClass('bgclocrc');
                 // $(this).attr("id",'remove').siblings().attr('id','');
                 // $( " input[type=text] ").attr("id",'namecc').siblings().attr('id','');
-                btns.onclick = function(){//js 调用
+                btns.onclick = function () {//js 调用
                     alert('确定删除相册？');
                     setTimeout(
-                        function(){
-                            if($bgcolor.hasClass('album'))
-                            {
+                        function () {
+                            if ($bgcolor.hasClass('album')) {
                                 alert("123");
                                 // document.getElementById('remove').remove();//js
                                 $('#321').remove();
                                 $removenews.fadeOut(250);
-                            }else
-                            {
+                            } else {
                                 alert('请选择相册')
                             }
-                        },250)
+                        }, 250)
                 }//
 
-                $changename.live('click' , function(){
+                $changename.live('click', function () {
 
-                    if($bgcolor.hasClass('album'))
-                    {
+                    if ($bgcolor.hasClass('album')) {
                         $('#321').find('.changename').val('');
-                        $('#321').find('.changename').css('border','1px solid #FF0000')
-                    }else
-                    {
+                        $('#321').find('.changename').css('border', '1px solid #FF0000')
+                    } else {
                         alert('请选择相册')
                     }
 
@@ -156,32 +154,33 @@
             });
             var x;
             //修改文件名
-            $namehide.live('focus' , function(){
-                $(this).css('border','1px solid #FF0000');
+            $namehide.live('focus', function () {
+                $(this).css('border', '1px solid #FF0000');
                 x = $(this).val();
             });
-            $namehide.live('blur' , function(){
+            $namehide.live('blur', function () {
                 alert('确定修改相册名？');
-                $(this).css('border','none');
-                if( $(this).val() == ""){
+                $(this).css('border', 'none');
+                if ($(this).val() == "") {
                     $(this).val('新建相册');
-                }else{
+                } else {
                     var newname = $(this).val();
                     alert(newname);
                     $.ajax({
-                        type:"POST",
-                        url:"/image/rename",
-                        data:{
-                            path:null,
-                            name:x,
-                            newName:newname
+                        type: "POST",
+                        url: "/image/rename",
+                        data: {
+                            path: null,
+                            name: x,
+                            newName: newname
                         },
-                        success:function (data) {
+                        success: function (data) {
                             alert("success");
                         },
-                        error:function () {
+                        error: function () {
                             alert("请求失败");
-                        }})
+                        }
+                    })
                 }
             });
         });
@@ -192,13 +191,14 @@
             margin: 0;
             padding: 0;
         }
-        body{
-    background:rgba(181,236,238,0.2);
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    }
+
+        body {
+            background: rgba(181, 236, 238, 0.2);
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
 
         .alldom {
             width: 85%;
@@ -312,12 +312,12 @@
             background: #fff;
         }
 
-        p{
+        p {
             width: 85%;
             float: right;
-            margin-bottom:20px;
-            padding:10px 0;
-            border-bottom:3px solid rgba(57,146,170,0.2);
+            margin-bottom: 20px;
+            padding: 10px 0;
+            border-bottom: 3px solid rgba(57, 146, 170, 0.2);
         }
 
         .carrynews {
@@ -352,7 +352,7 @@
             transition: 0.5s;
         }
 
-        .carrynews:hover{
+        .carrynews:hover {
             background-color: #5ed048;
         }
 
@@ -398,7 +398,7 @@
             transition: 0.5s;
         }
 
-        .removeall:hover{
+        .removeall:hover {
             background-color: #ff0500;
         }
 
@@ -443,8 +443,8 @@
             transition: 0.5s;
         }
 
-        .remove:hover{
-            background-color: rgba(152,151,147,0.72);
+        .remove:hover {
+            background-color: rgba(152, 151, 147, 0.72);
         }
 
         .remove:hover span {
@@ -464,11 +464,12 @@
     <button class="carrynews" style="vertical-align:middle"><span>新建相册 </span></button>
     <button class="removeall" style="vertical-align:middle"><span>清空相册</span></button>
     <button class="remove" id="removebutton" style="vertical-align:middle"><span>删除相册</span></button>
-</p><br/>
+</p>
+<br/>
 
-<div  class="alldom">
+<div class="alldom">
     <ul id="divall">
-<!--        <li ondblclick="window.location.href='image/createFolder'"><input type="text" class="changename" value="123"></li>-->
+        <!--        <li ondblclick="window.location.href='image/createFolder'"><input type="text" class="changename" value="123"></li>-->
     </ul>
 </div>
 

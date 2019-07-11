@@ -141,4 +141,9 @@ public class UserController {
     public String userPhotos(){
         return "userPhotos";
     }
+
+    @RequestMapping("/tdphotos")
+    public String tdphotos(){
+        return "tdphotos";
+    }
 }
