@@ -111,7 +111,7 @@
             font-size: 0;
         }
 
-        #btn button, #btn button:visited {
+        #btn button, #btn button:visited,#btn a,#btn a:visited{
             font-size: 14px;
             font-family: Arial;
             font-weight: normal;
@@ -132,7 +132,7 @@
             outline: none;
         }
 
-        #btn button:hover {
+        #btn button:hover,#btn a:hover {
             background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #dfdfdf), color-stop(100%, #ededed));
             background: -moz-linear-gradient(center top, #dfdfdf 5%, #ededed 100%);
             background: -ms-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
@@ -453,7 +453,7 @@
     <script>
 
         var src;
-
+        var srca;
         $(function () {
             $(".pimg").click(function () {
                 var _this = $(this);//将当前的pimg元素作为_this传入函数
@@ -465,7 +465,8 @@
             src = _this.attr("src");//获取当前点击的pimg元素中的src属性
             $("#bigimg").attr("src", src);
             $("#cropimg1").attr("src", src);
-            $("#cropimg2").attr("src", src);//设置#bigimg元素的src属性
+            $("#cropimg2").attr("src", src);
+            $("#download").attr("href",src);//设置#bigimg元素的src属性
             current = 0;
             var bigimg = document.getElementById('bigimg');
             bigimg.style.transform = "rotateZ(" + current + "deg)";
@@ -544,13 +545,17 @@
             });
 
             $("#fliter").click(function () {
+                var formalimg=document.getElementById("bigimg");
+                srca=formalimg.getAttribute('src');
                 $("#btns").fadeOut("fast");
                 $("#dofliter").fadeIn();
             });
              /*滤镜类型*/
             $("#fliter_select").change(function () {
-                var srcb = document.getElementById("bigimg");
-                var a = srcb.getAttribute('src');
+                var sel=document.getElementById("fliter_select");
+                var sel_value=sel.value;
+                if(sel_value=="black"){
+                    var a = srca;
                 $.ajax({
                     type: "POST",
                     url: "/image/grayFilter",
@@ -562,11 +567,53 @@
                         //alert(data);
                         var imgsrc = document.getElementById("bigimg");
                         imgsrc.src = data;
+                        ("#download").attr("href",data);
                     },
                     error: function () {
 
                     }
-                })
+                })}
+                else if(sel_value=="back"){
+                    var a = srca;
+                    $.ajax({
+                        type: "POST",
+                        url: "/image/invertFilter",
+
+                        data: {
+                            path: a
+                        },
+                        success: function (data) {
+                            //alert(data);
+                            var imgsrc = document.getElementById("bigimg");
+                            imgsrc.src = data;
+                            ("#download").attr("href",data);
+                        },
+                        error: function () {
+
+                        }
+                    })}
+                else if(sel_value=="unclear"){
+
+                    var a = srca;
+                    $.ajax({
+                        type: "POST",
+                        url: "/image/gaussianFilter",
+                        data: {
+                            path: a
+                        },
+                        success: function (data) {
+                            //alert(data);
+                            var imgsrc = document.getElementById("bigimg");
+                            imgsrc.src = data;
+                            ("#download").attr("href",data);
+                        },
+                        error: function () {
+
+                        }
+                    })}
+                else{
+                    $("#bigimg").attr("src",src);
+                }
             });
 
 
@@ -582,6 +629,7 @@
                     success: function (data) {
                         var imgsrc = document.getElementById("bigimg");
                         imgsrc.src = data;
+                        $("#download").attr("href",data);
                     },
                     error: function () {
 
@@ -618,24 +666,26 @@
             });
 
 
-            $("#download").click(function () {
-                var srcb = document.getElementById("bigimg");
-                var a = srcb.getAttribute('src');
-                $.ajax({
-                    type: "POST",
-                    url: "/image/download",
-                    data: {
-                        path: a
-                    },
-                    success: function (data) {
-                        alert("success");
-                    },
-                    error: function () {
-                        alert("shibai");
 
-                    }
-                })
-            });
+
+            // $("#download").click(function () {
+            //     var srcb = document.getElementById("bigimg");
+            //     var a = srcb.getAttribute('src');
+            //     $.ajax({
+            //         type: "POST",
+            //         url: "/image/download",
+            //         data: {
+            //             path: a
+            //         },
+            //         success: function (data) {
+            //             alert("success");
+            //         },
+            //         error: function () {
+            //             alert("shibai");
+            //
+            //         }
+            //     })
+            // });
         }
 
 
@@ -978,13 +1028,15 @@
             <button id="cutting">裁剪</button>
             <button id="shuiyin">水印</button>
             <button id="fliter">滤镜</button>
-            <button id="download">下载</button>
+            <a href="" id="download" download="timg">下载</a>
+
         </div>
         <div id="dofliter" style="display:none">
             <select id="fliter_select">
                 <option value="no">无</option>
                 <option value="black">黑白</option>
-                <option value="soft">柔和</option>
+                <option value="back">反色</option>
+                <option value="unclear">模糊</option>
             </select>
             <button id="fliter_confirm">确定</button>
             <button id="fliter_cancel">取消</button>

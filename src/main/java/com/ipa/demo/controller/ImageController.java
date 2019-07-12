@@ -577,6 +577,71 @@ public class ImageController {
 
     }
 
+
+    @PostMapping(value = "/invertFilter")
+    public String invertFilter(@RequestParam(value = "path") String path) throws IOException {
+
+        // 定义过滤器
+        String cpath = ROOT.replace("\\image", path.replace("/", "\\"));
+        InvertFilter filter = new InvertFilter();
+        File f = new File(cpath);
+        String name = f.getName();
+        cpath = cpath.replace("\\" + f.getName(), "");
+
+        BufferedImage fromImage = ImageIO.read(new File(cpath, name));
+        int width = fromImage.getWidth();
+        int height = fromImage.getHeight();
+        BufferedImage toImage = new BufferedImage(width, height,
+                BufferedImage.TYPE_INT_RGB);
+        filter.filter(fromImage, toImage);
+
+        ImageIO.write(toImage, "jpg", new File(cpath, "InvertFilter" + name));
+        File file = new File(cpath, "InvertFilter" + name);
+        saveImage(file);
+
+        String nfile = cpath + "\\" + "InvertFilter" + name;
+        nfile = nfile.replace(ROOT, "\\image");
+        System.out.println(nfile);
+        nfile = nfile.replace("\\", "/");
+        System.out.println(nfile);
+        return nfile;
+
+    }
+
+
+    @PostMapping(value = "/gaussianFilter")
+    public String gaussianFilter(@RequestParam(value = "path") String path) throws IOException {
+
+        // 定义过滤器
+        String cpath = ROOT.replace("\\image", path.replace("/", "\\"));
+        GaussianFilter filter = new GaussianFilter();
+        filter.setRadius(8);
+
+        File f = new File(cpath);
+        String name = f.getName();
+        cpath = cpath.replace("\\" + f.getName(), "");
+
+        BufferedImage fromImage = ImageIO.read(new File(cpath, name));
+        int width = fromImage.getWidth();
+        int height = fromImage.getHeight();
+        BufferedImage toImage = new BufferedImage(width, height,
+                BufferedImage.TYPE_INT_RGB);
+        filter.filter(fromImage, toImage);
+
+        ImageIO.write(toImage, "jpg", new File(cpath, "gaussianFilter" + name));
+        File file = new File(cpath, "gaussianFilter" + name);
+        saveImage(file);
+
+        String nfile = cpath + "\\" + "gaussianFilter" + name;
+        nfile = nfile.replace(ROOT, "\\image");
+        System.out.println(nfile);
+        nfile = nfile.replace("\\", "/");
+        System.out.println(nfile);
+        return nfile;
+
+    }
+
+
     private String getCpath(String path) {
         String cpath;
         //判断path是否为空

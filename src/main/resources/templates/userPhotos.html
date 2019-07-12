@@ -178,26 +178,58 @@
             });
 
 
-            $("#browsefile").change(function (e) {
-                for (var i = 0; i < e.target.files.length; i++) {
-                    var file = e.target.files.item(i);
-                    //允许文件MIME类型 也可以在input标签中指定accept属性
-                    //console.log(/^image\/.*$/i.test(file.type));
-                    if (!(/^image\/.*$/i.test(file.type))) {
-                        continue;      //不是图片 就跳出这一次循环
+            $("#browsefile").change(function (e){
+                    var formData = new FormData();
+                    formData.append('file', $('#browsefile')[0].files[0]);
+                $.ajax({
+                    url: "/image/doUpload",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if(data=="fail"){
+                            alert("上传失败");
+                        }else {
+
+                        }
+                        $("#images_show").empty();
+                        $("#browsefile").val('');
+                        window.location.reload();
+                        // alert(data);
+                    },
+                    error: function () {
+                        alert("上传失败！");
                     }
-                    //实例化FileReader API
-                    var freader = new FileReader();
-                    freader.readAsDataURL(file);
-                    freader.onload = function (e) {
-                        var imgsrc=e.target.result;
+                })
 
-
-
-
-                    }
                 }
-            });
+            // {
+            //     for (var i = 0; i < e.target.files.length; i++) {
+            //         var file = e.target.files.item(i);
+            //         //允许文件MIME类型 也可以在input标签中指定accept属性
+            //         //console.log(/^image\/.*$/i.test(file.type));
+            //         if (!(/^image\/.*$/i.test(file.type))) {
+            //             continue;      //不是图片 就跳出这一次循环
+            //         }
+            //         //实例化FileReader API
+            //         var freader = new FileReader();
+            //         freader.readAsDataURL(file);
+            //         freader.onload = function (e) {
+            //             var imgsrc=e.target.result;
+            //
+            //
+            //             var formData = new FormData();
+            //             formData.append("file", document.getElementById("browsefile").files[0]);
+            //             alert(x);
+            //
+            //
+            //
+            //
+            //         }
+            //     }
+            // }
+            );
         });
 
     </script>
