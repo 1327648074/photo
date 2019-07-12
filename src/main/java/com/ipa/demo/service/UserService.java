@@ -1,10 +1,10 @@
+//作者：吴勇
 package com.ipa.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ipa.demo.model.User;
 import com.ipa.demo.dao.UserDao;
-
 
 @Service
 public class UserService {

@@ -1,3 +1,4 @@
+//作者：郑智伟
 package com.ipa.demo.service;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class AnalyzeService {
 
     }
 
-    private  Tensor<Float> constructAndExecuteGraphToNormalizeImage(byte[] imageBytes) {
+    private Tensor<Float> constructAndExecuteGraphToNormalizeImage(byte[] imageBytes) {
         try (Graph g = new Graph()) {
             GraphBuilder b = new GraphBuilder(g);
 //            Some constants specific to the pre-trained model at:
@@ -116,7 +117,7 @@ public class AnalyzeService {
     // In the fullness of time, equivalents of the methods of this class should be auto-generated from
     // the OpDefs linked into libtensorflow_jni.so. That would match what is done in other languages
     // like Python, C++ and Go.
-     class GraphBuilder {
+    class GraphBuilder {
         GraphBuilder(Graph g) {
             this.g = g;
         }

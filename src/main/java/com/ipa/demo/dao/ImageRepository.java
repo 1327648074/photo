@@ -1,3 +1,4 @@
+//作者：陈志漂
 package com.ipa.demo.dao;
 
 import com.ipa.demo.model.Image;

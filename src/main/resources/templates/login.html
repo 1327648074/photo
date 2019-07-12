@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿<!--作者：黄帅，何知凡，吴勇-->
+<!--黄帅负责前端界面的布局，何知凡负责前端界面的渲染，吴勇负责本界面的ajax调用-->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -244,20 +246,19 @@
                         sessionStorage.setItem("username", username);
                         window.location.href = "/front/home";
                         $.ajax({
-                            type:"POST",
-                            url:"/image/login",
-                            data:{
-                                user:username
+                            type: "POST",
+                            url: "/image/login",
+                            data: {
+                                user: username
                             },
                             success: function (data) {
-                                    alert("欢迎"+username);
+                                alert("欢迎" + username);
                             },
                             error: function () {
-                                    alert("111");
-                                }
-                             })
-                    }
-                    else {
+                                alert("111");
+                            }
+                        })
+                    } else {
                         alert("登陆失败");
                     }
                 },

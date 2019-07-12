@@ -1,3 +1,5 @@
+<!--作者：黄帅，何知凡，吴勇-->
+<!--黄帅负责前端界面的布局，何知凡负责前端界面的渲染，吴勇负责本界面的ajax调用-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +7,7 @@
     <title></title>
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             $("#ifochange_frame").fadeIn("slow");
         });
     </script>
@@ -19,6 +21,7 @@
             display: inline;
             box-sizing: border-box;
         }
+
         input[type=email] {
             width: 80%;
             padding: 12px 20px;
@@ -28,7 +31,8 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-        select{
+
+        select {
             width: 30%;
             font-size: 15px;
             border: 1px solid #ccc;
@@ -36,6 +40,7 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+
         #btn_changeifo {
             width: 45%;
             background-color: #4CAF50;
@@ -52,6 +57,7 @@
         #btn_changeifo:hover {
             background-color: #45a049;
         }
+
         #btn_return {
             width: 45%;
             background-color: #4CAF50;
@@ -69,13 +75,13 @@
             background-color: #45a049;
         }
 
-        #ifochange_frame{
-            margin:150px 120px 15px 280px;
+        #ifochange_frame {
+            margin: 150px 120px 15px 280px;
             border-style: none;
             border-radius: 5px;
             background-color: #D1E1FA;
             padding: 50px 400px;
-            opacity:0.7;
+            opacity: 0.7;
             display: none;
         }
     </style>
@@ -90,46 +96,46 @@
         <option value="frmale">女</option>
     </select><br>
         签名：<input type="text" id="sign_change" name="sign">
-        <input type="button" id="btn_changeifo" value="保存"  >
+        <input type="button" id="btn_changeifo" value="保存">
         <input type="button" id="btn_return" value="取消">
     </form>
 </div>
 </body>
 <script>
     jQuery(document).ready(function () {
-        if(sessionStorage.getItem("username")==null){
-            window.location.href="/front/login";
+        if (sessionStorage.getItem("username") == null) {
+            window.location.href = "/front/login";
         }
         // alert(sessionStorage.getItem("username"));
-        $("#btn_return").on("click",function () {
-            window.location.href="/front/info";
+        $("#btn_return").on("click", function () {
+            window.location.href = "/front/info";
         })
-        $("#btn_changeifo").on("click",function () {
-            var nickname=$("#nickname_change").val();
-            var email=$("#email_change").val();
-            var sex=$("#sel_sex").val();
-            var autorGraph=$("#sign_change").val();
-            var info={
-                username:sessionStorage.getItem("username"),
-                nickname:nickname,
-                email:email,
-                sex:sex,
-                autorGraph:autorGraph
+        $("#btn_changeifo").on("click", function () {
+            var nickname = $("#nickname_change").val();
+            var email = $("#email_change").val();
+            var sex = $("#sel_sex").val();
+            var autorGraph = $("#sign_change").val();
+            var info = {
+                username: sessionStorage.getItem("username"),
+                nickname: nickname,
+                email: email,
+                sex: sex,
+                autorGraph: autorGraph
             }
             $.ajax({
-                type:"POST",
-                url:"/front/doChangeInfo",
-                contentType:"application/json;charset=UTF-8",
-                data:JSON.stringify(info),
-                success:function (data) {
-                    if(data =="success"){
+                type: "POST",
+                url: "/front/doChangeInfo",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(info),
+                success: function (data) {
+                    if (data == "success") {
                         alert("修改成功");
-                        window.location.href="/front/info";
-                    }else{
+                        window.location.href = "/front/info";
+                    } else {
                         alert("修改失败");
                     }
                 },
-                error:function () {
+                error: function () {
                     alert("修改失败");
                 }
             })

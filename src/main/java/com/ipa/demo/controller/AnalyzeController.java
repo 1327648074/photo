@@ -1,3 +1,4 @@
+//作者：郑智伟
 package com.ipa.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
@@ -16,16 +17,14 @@ public class AnalyzeController {
     AnalyzeService analyzeService;
 
     @PostMapping("/doAnalyze")
-    public Object doAnalyze (@RequestBody Map<String,String>map){
+    public Object doAnalyze(@RequestBody Map<String, String> map) {
         File file = new File(map.get("path"));
         String name = file.getName();
         JSONObject fileItem = new JSONObject();
         fileItem.put("name", name);
-        fileItem.put("folder",  analyzeService.analyze(map.get("path")));
+        fileItem.put("folder", analyzeService.analyze(map.get("path")));
         return fileItem;
     }
-
-
 
 
 }

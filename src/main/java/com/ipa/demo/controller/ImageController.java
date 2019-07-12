@@ -1,3 +1,4 @@
+//作者：陈志漂
 package com.ipa.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
@@ -94,7 +95,7 @@ public class ImageController {
     }
 
     @PostMapping("/moveImage")
-    public Object doAnalyze (@RequestParam(value = "path")String path){
+    public Object doAnalyze(@RequestParam(value = "path") String path) {
         File file = new File(path);
         String name = file.getName();
         File file1 = new File(path);
@@ -326,7 +327,7 @@ public class ImageController {
     //删除
     @RequestMapping("remove")
     public String remove(@RequestParam String path) {
-        String cpath = ROOT.replace("\\image", path.replace("/","\\"));
+        String cpath = ROOT.replace("\\image", path.replace("/", "\\"));
         GrayscaleFilter filter = new GrayscaleFilter();
         File f = new File(cpath);
         String name = f.getName();
@@ -477,13 +478,13 @@ public class ImageController {
                        @RequestParam(value = "x") String x, @RequestParam(value = "y") String y,
                        @RequestParam(value = "width") String width, @RequestParam(value = "hidth") String hidth) {
 
-        Double d3=Double.parseDouble(x);
+        Double d3 = Double.parseDouble(x);
         Integer x1 = d3.intValue();
-        Double d4=Double.parseDouble(y);
+        Double d4 = Double.parseDouble(y);
         Integer y1 = d4.intValue();
-        Double d1=Double.parseDouble(width);
+        Double d1 = Double.parseDouble(width);
         Integer width1 = d1.intValue();
-        Double d2=Double.parseDouble(hidth);
+        Double d2 = Double.parseDouble(hidth);
         Integer hidth1 = d2.intValue();
         System.out.println(x1);
         String cpath = ROOT.replace("\\image", path.replace("/", "\\"));

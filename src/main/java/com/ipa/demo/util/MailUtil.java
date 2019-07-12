@@ -1,3 +1,4 @@
+//作者：郑智伟
 package com.ipa.demo.util;
 
 import com.sun.mail.util.MailSSLSocketFactory;

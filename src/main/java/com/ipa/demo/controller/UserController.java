@@ -1,7 +1,6 @@
+//作者：吴勇
 package com.ipa.demo.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -94,11 +93,13 @@ public class UserController {
 
     //修改信息界面
     @RequestMapping("/changeInfo")
-    public String changeInfo(){return "changeInfo";}
+    public String changeInfo() {
+        return "changeInfo";
+    }
 
     //上传图片界面
     @RequestMapping("/upload")
-    public String upload(){
+    public String upload() {
         return "upload";
     }
 
@@ -121,29 +122,29 @@ public class UserController {
 
     //我的相册界面
     @RequestMapping("/myAlbum")
-    public String myAlbum(){
+    public String myAlbum() {
         return "myAlbum";
     }
 
     //展示图片界面
     @RequestMapping("/showPhotos")
-    public String showPhotos(){
+    public String showPhotos() {
         return "showPhotos";
     }
 
     //主页
     @RequestMapping("/welcome")
-    public String welcome(){
+    public String welcome() {
         return "welcome";
     }
 
     @RequestMapping("/userPhotos")
-    public String userPhotos(){
+    public String userPhotos() {
         return "userPhotos";
     }
 
     @RequestMapping("/tdphotos")
-    public String tdphotos(){
+    public String tdphotos() {
         return "tdphotos";
     }
 }
