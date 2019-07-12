@@ -24,4 +24,8 @@ public class AnalyzeController {
         fileItem.put("folder",  analyzeService.analyze(map.get("path")));
         return fileItem;
     }
+
+
+
+
 }

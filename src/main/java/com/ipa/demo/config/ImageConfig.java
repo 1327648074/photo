@@ -11,5 +11,6 @@ public class ImageConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         registry.addResourceHandler("/image/**").addResourceLocations("file:"+System.getProperty("user.dir") + "\\src\\main\\resources\\static\\image\\");
+
     }
 }

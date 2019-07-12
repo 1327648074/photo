@@ -15,7 +15,8 @@
             success: function (data) {
                 for (var i = 0; i < data.result.length; i++) {
                     (function (i) { //这个是function里i，即function的形参，也可以换成j，换成什么变量名都无所谓
-                        var x = "/image/" + data.result[i].path + "/" + data.result[i].name;
+                        var x = "/image" + data.result[i].path + "/" + data.result[i].name;
+                        //alert(x);
                         list[i]=x;
                     })(i);
                 }
@@ -509,6 +510,7 @@
 
             $("#return").click(function () {
                 $("#outerdiv").fadeOut("fast");
+                window.location.reload();
             });
 
             var current = 0;
@@ -525,6 +527,7 @@
             });
             $("#return").click(function () {
                 $("#outerdiv").fadeOut("fast");
+                window.location.reload();
             });
 
             $("#cutting").click(function () {
@@ -556,7 +559,7 @@
                         path: a
                     },
                     success: function (data) {
-                        alert(data);
+                        //alert(data);
                         var imgsrc = document.getElementById("bigimg");
                         imgsrc.src = data;
                     },
@@ -587,8 +590,51 @@
 
             });
             $("#fliter_cancel").click(function () {
-                $("#dofliter").fadeOut("fast");
-                $("#btns").fadeIn("fast");
+                var srcb = document.getElementById("bigimg");
+                var a = srcb.getAttribute('src');
+                $.ajax({
+                    type: "POST",
+                    url: "/image/remove",
+                    data: {
+                        path: a
+                    },
+                    success: function (data) {
+                        // $("#dofliter").fadeOut("fast");
+                        // $("#btns").fadeIn("fast");
+                        //alert("success");
+                        $("#bigimg").attr("src",src);
+                        $("#dofliter").fadeOut(300);
+                        $("#btns").delay(300).fadeIn("fast");
+                    },
+                    error: function () {
+                        alert("shibai");
+
+                    }
+                })
+            });
+
+            $("#fliter_confirm").click(function () {
+                window.location.reload();
+            });
+
+
+            $("#download").click(function () {
+                var srcb = document.getElementById("bigimg");
+                var a = srcb.getAttribute('src');
+                $.ajax({
+                    type: "POST",
+                    url: "/image/download",
+                    data: {
+                        path: a
+                    },
+                    success: function (data) {
+                        alert("success");
+                    },
+                    error: function () {
+                        alert("shibai");
+
+                    }
+                })
             });
         }
 
@@ -883,9 +929,10 @@
 
                 },
                 success: function (data) {
-                    alert(data);
+                    //alert(data);
                     var imgsrc = document.getElementById("bigimg");
                     imgsrc.src = data;
+                    window.location.reload();
 
                 },
                 error: function () {

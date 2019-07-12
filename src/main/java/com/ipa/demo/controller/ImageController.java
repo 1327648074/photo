@@ -26,10 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 @RestController
 @RequestMapping("/image")
@@ -96,6 +93,19 @@ public class ImageController {
         return FilePath + "\\" + file.getOriginalFilename();
     }
 
+    @PostMapping("/moveImage")
+    public Object doAnalyze (@RequestParam(value = "path")String path){
+        File file = new File(path);
+        String name = file.getName();
+        File file1 = new File(path);
+        String name1 = file1.getName();
+        JSONObject fileItem = new JSONObject();
+        fileItem.put("name", name);
+        fileItem.put("folder", name1);
+        return fileItem;
+    }
+
+
     @PostMapping(value = "/uploads")
     public String imageUpload(@RequestParam("file") MultipartFile[] file) {
         //判断是否为空
@@ -116,9 +126,9 @@ public class ImageController {
         File f = new File(cpath);
         String name = f.getName();
         cpath = cpath.replace("\\" + f.getName(), "");
-        Image image = imageRepository.findByNameAndUrl(name, path);
+        Image image = imageRepository.findByNameAndUrl(name, cpath);
         try {
-            imageService.downloadImage(path, name, response);
+            imageService.downloadImage(cpath, name, response);
         } catch (Exception e) {
             e.getMessage();
         }
@@ -315,9 +325,13 @@ public class ImageController {
 
     //删除
     @RequestMapping("remove")
-    public Object remove(@RequestParam String path, @RequestParam(value = "name") String name) {
+    public String remove(@RequestParam String path) {
+        String cpath = ROOT.replace("\\image", path.replace("/","\\"));
+        GrayscaleFilter filter = new GrayscaleFilter();
+        File f = new File(cpath);
+        String name = f.getName();
+        cpath = cpath.replace("\\" + f.getName(), "");
         try {
-            String cpath = getCpath(path);
             File file = new File(cpath, name);
             if (file.isFile()) {
                 Image image = imageRepository.findByNameAndUrl(name, cpath);
@@ -334,7 +348,7 @@ public class ImageController {
             if (!FileUtils.deleteQuietly(file)) {
                 throw new Exception("删除失败: " + file.getAbsolutePath());
             }
-            return "success";
+            return "success to remove";
         } catch (Exception e) {
             return e.getMessage();
         }
@@ -512,7 +526,7 @@ public class ImageController {
             if (imageRepository.findByNameAndUrl("waterMark" + "_" + name, cpath) == null) {
 
 
-                Thumbnails.of(cpath + "\\" + name).scale(1f).watermark(Positions.TOP_LEFT, ImageIO.read(new File(System.getProperty("user.dir") + "\\src\\main\\resources\\static\\image\\shuiyin.jpg")), 1f)
+                Thumbnails.of(cpath + "\\" + name).scale(1f).watermark(Positions.TOP_LEFT, ImageIO.read(new File(System.getProperty("user.dir") + "\\src\\main\\resources\\static\\image\\shuiyin.png")), 1f)
                         .toFile(cpath + "\\" + "waterMark" + "_" + name);
                 File file = new File(cpath + "\\" + "waterMark" + "_" + name);
                 saveImage(file);

@@ -189,6 +189,7 @@
                 if(data=="fail"){
                     alert("上传失败");
                 }else {
+                    alert("正在识别，请稍后");
                     var path={path:data};
                     $.ajax({
                         type:"POST",
@@ -207,7 +208,7 @@
                                         folderName:data.folder
                                     },
                                     success:function (data) {
-                                        alert(data);
+                                        // alert(data);
                                         $.ajax({
                                             type:"POST",
                                             url:"/image/move",

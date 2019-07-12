@@ -12,13 +12,9 @@
                 $removenews = $('.remove'), $removeall = $('.removeall'), $removeright = $('#removethispc'),
                 $namehide = $('#divall li input.changename'), $changename = $('#changename');
             $removenews.hide();
-            //新建
+            //添加图片
             $carry.live('click', function () {
-                var albumName = prompt("请输入相册名称", "新建相册");
-                var l = "D:/Flash作业/图21.jpg";
-                create(albumName, l);
-
-
+                $("#browsefile").trigger('click');
             });
 
 
@@ -33,6 +29,7 @@
                     for (var i = 0; i < data.result.length; i++) {
                         (function (i) { //这个是function里i，即function的形参，也可以换成j，换成什么变量名都无所谓
                             var x = "/image" + data.result[i].path.toString() + "/" + data.result[i].name.toString();
+                            //alert(x);
                             create(data.result[i].name, x);
 
 
@@ -177,6 +174,28 @@
                     $(this).val('新建相册');
                 } else {
                     // $(this).parent().find('span').text() = $(this).value;
+                }
+            });
+
+
+            $("#browsefile").change(function (e) {
+                for (var i = 0; i < e.target.files.length; i++) {
+                    var file = e.target.files.item(i);
+                    //允许文件MIME类型 也可以在input标签中指定accept属性
+                    //console.log(/^image\/.*$/i.test(file.type));
+                    if (!(/^image\/.*$/i.test(file.type))) {
+                        continue;      //不是图片 就跳出这一次循环
+                    }
+                    //实例化FileReader API
+                    var freader = new FileReader();
+                    freader.readAsDataURL(file);
+                    freader.onload = function (e) {
+                        var imgsrc=e.target.result;
+
+
+
+
+                    }
                 }
             });
         });
@@ -466,9 +485,10 @@
 <body>
 
 <p>
-    <button class="carrynews" style="vertical-align:middle"><span>添加图片 </span></button>
+    <button class="carrynews" id="addphotos" style="vertical-align:middle"><span>添加图片 </span></button>
     <button class="removeall" style="vertical-align:middle"><span>清空相册</span></button>
     <button class="showPhotos" id="gallery" style="vertical-align:middle"><span>旋转画廊</span></button>
+    <input type="file" id="browsefile" name="file" style="display:none">
     <!--    <button class="remove" id="removebutton" style="vertical-align:middle"><span>删除图片</span></button>-->
 </p>
 <br/>
@@ -498,3 +518,59 @@
 </body>
 
 </html>
+<script>
+    $.ajax({
+        url: "/image/doUpload",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            if(data=="fail"){
+                alert("上传失败");
+            }else {
+                var path={path:data};
+                $.ajax({
+                    type:"POST",
+                    url:"/image/moveImage",
+                    contentType: "application/json;charset=UTF-8",
+                    data:JSON.stringify(path),
+                    success:function (data) {
+                        var r=confirm("你的图片"+data.name+"为："+data.folder+"!是否放入推荐相册中？");
+                        var name = data.name;
+                        var folder = data.folder;
+                        if(r){
+                                    alert(data);
+                                    $.ajax({
+                                        type:"POST",
+                                        url:"/image/move",
+                                        data:{
+                                            path:null,
+                                            newPath : folder,
+                                            name: name
+                                        },
+                                        success:function (data) {
+
+                                        },
+                                        error:function () {
+                                            alert("失败");
+                                        }})}
+                        else {
+                            alert("error");
+                        }
+                    },
+                    error:function () {
+                        alert("分析失败");
+                    }
+                })
+            }
+            $("#images_show").empty();
+            $("#browsefile").val('');
+
+            // alert(data);
+        },
+        error: function () {
+            alert("上传失败！");
+        }
+    })
+    </script>
